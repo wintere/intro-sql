@@ -1,0 +1,10 @@
+---
+title: "Credits"
+format: html
+---
+
+The material in this curriculum is adapted from [*Databases and SQL*](https://swcarpentry.github.io/sql-novice-survey/) by [The Carpentries](https://carpentries.org/). 
+It is licensed under the [CC-BY-4.0 license](https://creativecommons.org/licenses/by/4.0/).
+
+This site was created in [Quarto](https://quarto.org/) by Erin M. Winter for the Data
+Services Department of the University of Oregon Libraries.

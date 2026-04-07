@@ -1,0 +1,36 @@
+project:
+  type: website
+
+website:
+  title: "UO Data Services: Introduction to SQL"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: setup.qmd
+        text: "Setup"
+      - text: "Lessons"
+        menu:
+            - text: "Why Databases"
+              href: lessons/lesson-1.html
+            - text: "Selection Basics"
+              href: lessons/lesson-2.html
+      - href: credits.qmd
+        text: Credits
+  page-footer:
+    left:
+      - icon: github
+        href: https://github.com/wintere/intro_to_sql
+    right:
+        <a href="https://library.uoregon.edu/data-services">UO Data Services</a>
+format:
+  html:
+    theme: zephyr
+    css: styles.css
+    toc: false
+    code-copy: true
+
+publish:
+  github:
+    branch: main
+    folder: docs

@@ -1,0 +1,99 @@
+---
+title: "Selection Basics"
+format: html
+---
+
+## Introducing the Workshop Database
+
+Before using SQL to query the data, let’s inspect the structure
+and contents of our music store database. 
+
+The structure of this database will be explained in more detail as more SQL concepts are introduced. 
+Remote attendees will receive a digital copy of this schema diagram, while in-person attendees will receive a handout.
+
+**Album**
+
+
+Think of this schema diagram as a roadmap to your database!
+
+## Exploring the Database in Beekeeper Studio
+
+### The Beekeeper Studio Interface
+
+![The Beekeeper Studio interface](../images/02-basic-interface.png){width=400 fig-align="left"}
+
+On the left side of Beekeeper Studio, there is a navigation pane with three icons.
+
+* The first, a database symbol, allows you to inspect the structure and properties of the current database.
+* The second allows you to see your saved queries. We'll talk about saving queries shortly.
+* Finally, the third allows you to see all the queries you've run in the current workspace, including ones you may not have saved.
+
+## SELECT, FROM, and LIMIT
+
+For our first query, let's list the first and last names of each customer known to have purchased music from the store.
+To do this, we need the keywords **SELECT** and **FROM**.
+
+Click the **+** button in the Beekeeper Studio editor pane to open a new query console and type the following.
+
+![A first query in the Beekepeer Studio console](../images/02-query-interface.png){width=700 fig-align="left"}
+
+### Unpacking a First SQL Query 
+
+```sql
+SELECT FirstName, LastName 
+FROM Customer;
+```
+
+* `FROM` is the most important part of the query. It must be followed by the name of a table in the database.
+* `SELECT` is followed by comma-separated names of fields within that table.
+* Every SQL query ends with a semicolon `;`.
+
+::: {.callout-note}
+SQL is case-insensitive, but it's best practice to capitalize keywords like
+`SELECT` and `FROM`. It makes it easier to distinguish between keywords and values, which
+are typically camel case or title case.
+:::
+
+Now, going back to our query, it’s important to understand that the rows and columns in a database 
+table aren’t actually stored in any particular order. 
+They will always be displayed in some order, but 
+we can control that in various ways. For example, we could 
+swap the columns in the output by writing our query as:
+
+```sql
+SELECT LastName, FirstName
+FROM Customer;
+```
+
+As a shortcut, we can select all of the columns in a table using `*`:
+
+```sql
+SELECT *
+FROM Customer;
+```
+
+The `*` symbol tells SQL to display all of the fields in the table
+from left to right.
+
+### Controlling Output with `LIMIT`
+
+The `Customer` table has 59 rows, which may be more than we want
+to look at a time. Luckily, SQL has a convenient command that
+limits the number of rows returned.
+
+At the end of any SQL command, just before the semicolon, use
+the keyword `LIMIT` followed by a number of rows to indicate
+how many rows we want to return.
+
+```sql
+SELECT LastName, FirstName
+FROM Customer
+LIMIT 5;
+```
+| LastName    | FirstName |
+| ----------- | --------- |
+| Gonçalves   | Luís      |
+| Köhler      | Leonie    |
+| Tremblay    | François  |
+| Hansen      | Bjørn     |
+| Wichterlová | František |
