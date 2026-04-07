@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.22">
+<meta name="generator" content="quarto-1.8.17">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-cd7454b418030687c631a6a7286fbe16.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-c2d8198b7f72dec16de60f0cb3fab69f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e1062c545272cfa9492e454288d7340f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-25d36f370f74572310f8908c5fb308fd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -100,6 +100,21 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link active" href="./setup.html" aria-current="page"> 
 <span class="menu-text">Setup</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-lessons" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Lessons</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-lessons">    
+        <li>
+    <a class="dropdown-item" href="./lessons/lesson-1.html">
+ <span class="dropdown-text">Why Databases</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./lessons/lesson-2.html">
+ <span class="dropdown-text">Selection Basics</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="./credits.html"> 
 <span class="menu-text">Credits</span></a>
@@ -186,14 +201,20 @@ ul.task-list li input[type="checkbox"] {
 <li>After the installer finishes, you will be prompted to launch Beekeeper Studio.</li>
 </ol>
 <ul>
-<li>In the future, you can launch the program for the Windows Start Menu.</li>
+<li>In the future, you can launch the program from the Windows Start Menu.</li>
 </ul>
 </section>
 </section>
 <section id="download-the-sample-database-the-chinook-music-store" class="level2">
 <h2 class="anchored" data-anchor-id="download-the-sample-database-the-chinook-music-store">Download the Sample Database: The “Chinook” Music Store</h2>
 <p>Real-world relational databases are typically run on a <em>server</em>, a continously running computer accessible by many users or programs simultaneously. However, for teaching purposes, we will be using a lightweight database format called SQLite. SQLite is a program that can read (and write) a database to a specially formatted file stored on your computer. SQLite is used in mobile apps and other smart devices to store and manage data because it is simple, portable, and compact.</p>
-<p>The <a href="https://github.com/lerocha/chinook-database">Chinook database</a> represents purchase records for a digital media store, including tables for artists, albums, media tracks, invoices and customers. Think of it as a miniature version of the iTunes Music Store. While the names of the bands and albums in the dataset are real, the purchase information is completely fictional. This dataset is popular for teaching because it’s open-source, demonstrates good database design principles, and gives students the opportunity to practice a variety of SQL features. I have simplified the database slightly to fit the time frame of this workshop.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="images/00-tech-stack.png" class="img-fluid figure-img" width="500"></p>
+<figcaption>A diagram of the workshop technical stack</figcaption>
+</figure>
+</div>
+<p>The <a href="https://github.com/lerocha/chinook-database">Chinook database</a> represents purchase records for a digital media store, including tables for artists, albums, media tracks, invoices and customers. Think of it as a miniature version of the iTunes Music Store. While the names of the bands and albums in the dataset are real, the purchase information is completely fictional. This dataset is popular for teaching because it’s open-source, demonstrates good database design principles, and gives students the opportunity to practice a variety of SQL features.</p>
 <p>SQLite requires a <em>.sqlite</em> file to run, so you will need to save this file somewhere in a location you can remember.</p>
 <p>Make a new folder named <code>SQLWorkshop</code> in your Documents folder or on your Desktop. Keep track of this folder for the duration of the workshop.</p>
 <p>Click the button below to download a copy of the Chninook database to your computer. Save or copy the file to your <code>SQLWorkshop</code> folder.</p>
