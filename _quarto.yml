@@ -9,12 +9,6 @@ website:
         text: Home
       - href: setup.qmd
         text: "Setup"
-      - text: "Lessons"
-        menu:
-            - text: "Why Databases"
-              href: lessons/lesson-1.html
-            - text: "Selection Basics"
-              href: lessons/lesson-2.html
       - href: credits.qmd
         text: Credits
   page-footer:

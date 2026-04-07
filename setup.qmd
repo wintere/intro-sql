@@ -53,22 +53,24 @@ to your Desktop.
 5. Run the `.exe` installer.
 6. When prompted, choose to install the application only for you.
 7. After the installer finishes, you will be prompted to launch Beekeeper Studio.
- - In the future, you can launch the program for the Windows Start Menu.
+ - In the future, you can launch the program from the Windows Start Menu.
 
 ## Download the Sample Database: The "Chinook" Music Store 
-
-Real-world relational databases are typically run on a *server*, a continously running computer accessible by many users or programs simultaneously. However, for teaching 
+Real-world relational databases are typically run on a *server*, a continously running computer 
+accessible by many users or programs simultaneously. However, for teaching 
 purposes, we will be using a lightweight database format called SQLite. SQLite is a program
 that can read (and write) a database to a specially formatted file stored on your computer.
 SQLite is used in mobile apps and other smart devices to store and manage data because it
 is simple, portable, and compact.
+
+![A diagram of the workshop technical stack](images/00-tech-stack.png){width=500 fig-align="left"}
 
 The [Chinook database](https://github.com/lerocha/chinook-database) represents purchase records for a  digital media store, including 
 tables for artists, albums, media tracks, invoices and customers. Think of it as a miniature version of the iTunes Music Store. While the names of the bands and albums
 in the dataset are real, the purchase information is completely fictional.
 This dataset is popular for teaching because it's open-source, demonstrates good
 database design principles, and gives students the opportunity to practice a variety
-of SQL features. I have simplified the database slightly to fit the time frame of this workshop.
+of SQL features.
 
 SQLite requires  a *.sqlite* file to run, so you will need to save this file somewhere
 in a location you can remember. 

@@ -30,7 +30,7 @@ fixed set of columns and a variable number of records.
 * Each **attribute** has an associated data type. You will encounter the following SQL
 data types in this workshop:
     - **integer**: a signed whole number
-    - **numeric**: used for storing decimals or integers, here used for decimals
+    - **numeric**: used for storing decimals or floats
     - **varchar(n)**/**nvarchar(n)**: a string (text) of at most n characters, including spaces
     - **char(n)**: a string (text) of exactly n characters, including spaces
     - **datetime**: a date and time string in the form `'YYYY-MM-DD 00:00:00'`

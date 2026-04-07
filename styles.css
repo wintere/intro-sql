@@ -18,7 +18,10 @@ ol {
 	margin-bottom: 0;
 }
 
-
 thead th{
   text-transform: none;
+}
+
+.callout-answer {
+  border-left-color: #28a745;
 }
