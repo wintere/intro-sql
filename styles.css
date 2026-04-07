@@ -1,0 +1,24 @@
+
+/* Makes the top bar UO green with white links*/
+.navbar {
+  background-color: #007030;
+}
+
+.navbar a {
+  color: #ffffff;
+}
+
+/* Drop-down items must be black to avoid white on white */
+.navbar .dropdown-item {
+  color: #000000;
+}
+
+ol {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+
+thead th{
+  text-transform: none;
+}
