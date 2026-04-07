@@ -135,21 +135,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../setup.html"> 
 <span class="menu-text">Setup</span></a>
   </li>  
-  <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-lessons" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Lessons</span>
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-lessons">    
-        <li>
-    <a class="dropdown-item" href="../lessons/lesson-1.html">
- <span class="dropdown-text">Why Databases</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../lessons/lesson-2.html">
- <span class="dropdown-text">Selection Basics</span></a>
-  </li>  
-    </ul>
-  </li>
   <li class="nav-item">
     <a class="nav-link" href="../credits.html"> 
 <span class="menu-text">Credits</span></a>
@@ -245,7 +230,7 @@ Note
 <p>SQL is case-insensitive, but it’s best practice to capitalize keywords like <code>SELECT</code> and <code>FROM</code>. It makes it easier to distinguish between keywords and values, which are typically camel case or title case.</p>
 </div>
 </div>
-<p>Now, going back to our query, it’s important to understand that the rows and columns in a database table aren’t actually stored in any particular order. They will always be displayed in some order, but we can control that in various ways. For example, we could swap the columns in the output by writing our query as:</p>
+<p>Now, going back to our query, it’s important to understand that the rows and columns in a database table aren’t actually stored in any particular order. For example, we can swap the columns in the output by writing our query as:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>As a shortcut, we can select all of the columns in a table using <code>*</code>:</p>
@@ -255,7 +240,7 @@ Note
 </section>
 <section id="controlling-output-with-limit" class="level3">
 <h3 class="anchored" data-anchor-id="controlling-output-with-limit">Controlling Output with <code>LIMIT</code></h3>
-<p>The <code>Customer</code> table has 59 rows, which may be more than we want to look at a time. Luckily, SQL has a convenient command that limits the number of rows returned.</p>
+<p>The <code>Customer</code> table has 59 rows, which is more than we want to read at once. Luckily, SQL has keyword that limits the number of rows returned.</p>
 <p>At the end of any SQL command, just before the semicolon, use the keyword <code>LIMIT</code> followed by a number of rows to indicate how many rows we want to return.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
@@ -290,9 +275,75 @@ Note
 </tr>
 </tbody>
 </table>
-
-
+<section id="quiz-try-it-yourself" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-try-it-yourself">Quiz: Try it Yourself</h4>
+<p>What SQL query will you give the email address of the first five customers in the Customer table?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>luisg@embraer.com.br</td>
+</tr>
+<tr class="even">
+<td>leonekohler@surfeu.de</td>
+</tr>
+<tr class="odd">
+<td>ftremblay@gmail.com</td>
+</tr>
+<tr class="even">
+<td>bjorn.hansen@yahoo.no</td>
+</tr>
+<tr class="odd">
+<td>frantisekw@jetbrains.com</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
+</section>
+<section id="debugging-sql-syntax-and-spelling" class="level3">
+<h3 class="anchored" data-anchor-id="debugging-sql-syntax-and-spelling">Debugging SQL: Syntax and Spelling</h3>
+<p>You might have noticed that I’ve been entering each <em>clause</em> in these SQL queries in a specific order. <code>SELECT</code> comes before <code>FROM</code> which comes before <code>LIMIT</code>. This is because the grammar of SQL requires keywords to have a hierarchy and order. We will discuss the syntactic placement of each keyword as new ones are introduced.</p>
+<p>As an example, let’s see what happens if we invert the order of SELECT and FROM in a query.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>near "FROM": syntax error</code></pre>
+<p>If you get a syntax error message when running a query, inspect the grammar of your query carefully.</p>
+<p>The <code>SELECT</code> keyword must be followed by a <code>*</code> or the name or one or more columns in the table in the <code>FROM</code> clause. If you ask SQL to select a column that doesn’t exist, the query will fail.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> email_address</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> CUSTOMER</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>no such column: email_address - Check that you only use double 
+quotes (") for identifiers, not strings</code></pre>
+<p>When you see a <code>no such column</code> error message, check the spelling the name of each field in the SELECT clause. Remember you can use the Entity pane on the left side of Beekeeper Studio or the name and data type of each column in your database at any time; make sure the name matches exactly.</p>
+</section>
+</section>
+<section id="where-filtering-sql-queries" class="level2">
+<h2 class="anchored" data-anchor-id="where-filtering-sql-queries"><code>WHERE</code>: Filtering SQL Queries</h2>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -368,7 +419,7 @@ Note
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/wintere\.github\.io\/intro-sql\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
