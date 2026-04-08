@@ -9,8 +9,12 @@ website:
         text: Home
       - href: setup.qmd
         text: "Setup"
+      - text: "Lessons"
+        menu:
+          - text: "Introduction"
+            href: lessons/lesson-1.html
       - href: credits.qmd
-        text: Credits
+        text: Credits 
   page-footer:
     left:
       - icon: github
