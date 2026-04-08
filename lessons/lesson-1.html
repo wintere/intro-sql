@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Relational Databases – UO Data Services: Introduction to SQL</title>
+<title>Introduction – UO Data Services: Introduction to SQL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -100,6 +135,17 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="../setup.html"> 
 <span class="menu-text">Setup</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-lessons" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Lessons</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-lessons">    
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-1.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../credits.html"> 
 <span class="menu-text">Credits</span></a>
@@ -121,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Relational Databases</h1>
+<h1 class="title">Introduction</h1>
 </div>
 
 
@@ -141,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="why-use-relational-databases" class="level2">
 <h2 class="anchored" data-anchor-id="why-use-relational-databases">Why Use Relational Databases?</h2>
 <p>Technically, any collection of structured information, whether a spreadsheet or set of files, can be considered a database. However, this class will focus on a specific family of databases: relational databases. <strong>Relational databases</strong> organize information into tables. They have been a fixture of businesses, non-profits, and educational institutions for decades.</p>
-<p>Databases grew out of a need for secure, robust, and concurrently accessible records. Databases allow administrators to restrict which users can read, write, or delete information on table by table basis. For example, at an educational institution like the University of Oregon, it is important that students see their own information but not information pertaining to other students.</p>
+<p>Databases grew out of a need for secure, robust, and concurrently accessible records. Databases allow administrators to restrict which users can read, write, or delete information on a table by table basis. For example, at an educational institution like the University of Oregon, it is important that students see their own information but not information pertaining to other students.</p>
 <p>We will not get into the details of <em>how</em> databases are managed in this workshop, but it is important to understand that SQL (as a query language) works independently of the implementation of the database. Despite advances in computing technology, many databases still retain the tabular structure popularized in the 80s and 90s.</p>
 </section>
 <section id="relational-databases-tables" class="level2">
@@ -151,11 +197,11 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="../images/01-table-format.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="700"></p>
 </figure>
 </div>
-<p>A relational database stores information in <strong>tables</strong> or <strong>entities</strong> each of which has a fixed set of columns and a variable number of records.</p>
-<section id="fields" class="level3">
-<h3 class="anchored" data-anchor-id="fields">Fields</h3>
+<p>A relational database stores information in <strong>tables</strong> or <strong>entities</strong>. Each table has a set of columns and a variable number of records.</p>
+<section id="attributes" class="level3">
+<h3 class="anchored" data-anchor-id="attributes">Attributes</h3>
 <ul>
-<li>Each <strong>attribute</strong> has an associated data type. You will encounter the following SQL data types in this workshop:
+<li>Each <strong>attribute</strong> (also known as a field or column) has an associated data type. You will encounter the following SQL data types in this workshop:
 <ul>
 <li><strong>integer</strong>: a signed whole number</li>
 <li><strong>numeric</strong>: used for storing decimals or floats</li>
@@ -169,11 +215,255 @@ ul.task-list li input[type="checkbox"] {
 <section id="records" class="level3">
 <h3 class="anchored" data-anchor-id="records">Records</h3>
 <ul>
-<li>Every <strong>record</strong> has the same number of attributes.</li>
+<li>Every <strong>record</strong> or <strong>row</strong> has the same number of attributes.</li>
 <li>There is no limit on the number of records in a table. However, for performance reasons, SQL tables should be no larger than they need to be to store required information.</li>
 </ul>
+</section>
+</section>
+<section id="introducing-the-workshop-database" class="level2">
+<h2 class="anchored" data-anchor-id="introducing-the-workshop-database">Introducing the Workshop Database</h2>
+<p>Before using SQL to query the data, let’s inspect the structure and contents of our music store database.</p>
+<section id="table-and-field-names" class="level3">
+<h3 class="anchored" data-anchor-id="table-and-field-names">Table and Field Names</h3>
+<section id="album" class="level4">
+<h4 class="anchored" data-anchor-id="album">Album</h4>
+<ul>
+<li>A table of musical albums</li>
+<li><code>AlbumId</code> - integer</li>
+<li><code>Title</code> - nvarchar(160)</li>
+<li><code>ArtistId</code> - integer</li>
+</ul>
+</section>
+<section id="artist" class="level4">
+<h4 class="anchored" data-anchor-id="artist">Artist</h4>
+<ul>
+<li>A table of artist and band names</li>
+<li><code>ArtistId</code> - integer</li>
+<li><code>Name</code> - nvarchar(120)</li>
+</ul>
+</section>
+<section id="customer" class="level4">
+<h4 class="anchored" data-anchor-id="customer">Customer</h4>
+<ul>
+<li>A table of customer name and address information</li>
+<li><code>CustomerId</code> - integer</li>
+<li><code>FirstName</code> - nvarchar</li>
+<li><code>LastName</code> - nvarchar</li>
+<li><code>Company</code> - nvarchar</li>
+<li><code>Address</code> - nvarchar</li>
+<li><code>City</code> - nvarchar</li>
+<li><code>State</code> - nvarchar</li>
+<li><code>Country</code> - nvarchar</li>
+<li><code>PostalCode</code> - nvarchar</li>
+</ul>
+</section>
+<section id="genre" class="level4">
+<h4 class="anchored" data-anchor-id="genre">Genre</h4>
+<ul>
+<li>A table of musical genres</li>
+<li><code>GenreId</code> - integer</li>
+<li><code>Name</code> - nvarchar(120)</li>
+</ul>
+</section>
+<section id="invoice" class="level4">
+<h4 class="anchored" data-anchor-id="invoice">Invoice</h4>
+<ul>
+<li>A table of invoices, with customer ids and itemized totals</li>
+<li><code>InvoiceId</code> - integer</li>
+<li><code>CustomerId</code> - integer</li>
+<li><code>InvoiceDate</code> - datetime</li>
+<li><code>BillingAddress</code> - nvarchar(70)</li>
+<li><code>BillingCity</code> - nvarchar(40)</li>
+<li><code>BillingState</code> - nvarchar(40)</li>
+<li><code>BillingCountry</code> - nvarchar(40)</li>
+<li><code>BillingPostalCode</code> - nvarchar(10)</li>
+<li><code>Total</code> - numeric</li>
+</ul>
+</section>
+<section id="invoiceline" class="level4">
+<h4 class="anchored" data-anchor-id="invoiceline">InvoiceLine</h4>
+<ul>
+<li>A table of invoice components, outlining individual purchases</li>
+<li><code>InvoiceLineId</code> - integer</li>
+<li><code>InvoiceId</code> - integer</li>
+<li><code>TrackId</code> - integer</li>
+<li><code>UnitPrice</code> - numeric</li>
+<li><code>Quantity</code> - integer</li>
+</ul>
+</section>
+<section id="track" class="level4">
+<h4 class="anchored" data-anchor-id="track">Track</h4>
+<ul>
+<li>A table of track metadata</li>
+<li><code>TrackId</code> - integer</li>
+<li><code>Name</code> - nvarchar</li>
+<li><code>AlbumId</code> - integer</li>
+<li><code>GenreId</code>- integer</li>
+<li><code>Composer</code> - nvarchar</li>
+<li><code>Milliseconds</code> - integer</li>
+<li><code>Bytes</code> - integer</li>
+<li><code>UnitPrice</code> - numeric</li>
+</ul>
+</section>
+</section>
+<section id="first-peek-schema-diagrams" class="level3">
+<h3 class="anchored" data-anchor-id="first-peek-schema-diagrams">First Peek: Schema Diagrams</h3>
+<p>Schema diagrams are used to represent relationships between tables in a database.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/02-schema-diagram.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>A schema diagram for the example music database</figcaption>
+</figure>
+</div>
+<p>The structure of this database will be explained in more detail as more SQL concepts are introduced. Remote attendees will receive a digital copy of this schema diagram, while in-person attendees will receive a handout. Think of this schema diagram as a roadmap to your database!</p>
+</section>
+</section>
+<section id="exploring-the-database-in-beekeeper-studio" class="level2">
+<h2 class="anchored" data-anchor-id="exploring-the-database-in-beekeeper-studio">Exploring the Database in Beekeeper Studio</h2>
+<section id="the-beekeeper-studio-interface" class="level3">
+<h3 class="anchored" data-anchor-id="the-beekeeper-studio-interface">The Beekeeper Studio Interface</h3>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/02-basic-interface.png" class="img-fluid figure-img" width="400"></p>
+<figcaption>The Beekeeper Studio interface</figcaption>
+</figure>
+</div>
+<p>On the left side of Beekeeper Studio, there is a navigation pane with three icons.</p>
+<ul>
+<li>The first, a database symbol, allows you to inspect the structure and properties of the current database.</li>
+<li>The second allows you to see your saved queries. We’ll talk about saving queries shortly.</li>
+<li>Finally, the third allows you to see all the queries you’ve run in the current workspace, including ones you may not have saved.</li>
+</ul>
+</section>
+</section>
+<section id="select-from-and-limit" class="level2">
+<h2 class="anchored" data-anchor-id="select-from-and-limit">SELECT, FROM, and LIMIT</h2>
+<p>For our first query, let’s list the first and last names of each customer known to have purchased music from the store. To do this, we need the keywords <strong>SELECT</strong> and <strong>FROM</strong>.</p>
+<p>Click the <strong>+</strong> button in the Beekeeper Studio editor pane to open a new query console and type the following.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/02-query-interface.png" class="img-fluid figure-img" width="700"></p>
+<figcaption>A first query in the Beekepeer Studio console</figcaption>
+</figure>
+</div>
+<section id="unpacking-a-first-sql-query" class="level3">
+<h3 class="anchored" data-anchor-id="unpacking-a-first-sql-query">Unpacking a First SQL Query</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> FirstName, LastName </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>FROM</code> is the most important part of the query. It must be followed by the name of a table in the database.</li>
+<li><code>SELECT</code> is followed by comma-separated names of fields within that table.</li>
+<li>Every SQL query ends with a semicolon <code>;</code>.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>SQL is case-insensitive, but it’s best practice to capitalize keywords like <code>SELECT</code> and <code>FROM</code>. It makes it easier to distinguish between keywords and values, which are typically camel case or title case.</p>
+</div>
+</div>
+<p>To change the order of columns in our ourput, we can rewrite the order as follows:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>As a shortcut, we can select all of the columns in a table using <code>*</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>*</code> symbol tells SQL to display all of the fields in the table from left to right.</p>
+</section>
+<section id="controlling-output-with-limit" class="level3">
+<h3 class="anchored" data-anchor-id="controlling-output-with-limit">Controlling Output with <code>LIMIT</code></h3>
+<p>The <code>Customer</code> table has 59 rows, which is more than we want to read at once. Luckily, SQL has keyword that limits the number of rows returned.</p>
+<p>At the end of any SQL command, just before the semicolon, use the keyword <code>LIMIT</code> followed by a number of rows to indicate how many rows we want to return.</p>
+<ul>
+<li><code>LIMIT</code> must be followed by a positive integer.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>LastName</th>
+<th>FirstName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Gonçalves</td>
+<td>Luís</td>
+</tr>
+<tr class="even">
+<td>Köhler</td>
+<td>Leonie</td>
+</tr>
+<tr class="odd">
+<td>Tremblay</td>
+<td>François</td>
+</tr>
+<tr class="even">
+<td>Hansen</td>
+<td>Bjørn</td>
+</tr>
+<tr class="odd">
+<td>Wichterlová</td>
+<td>František</td>
+</tr>
+</tbody>
+</table>
+<section id="quiz-try-it-yourself" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-try-it-yourself">Quiz: Try it Yourself</h4>
+<p>What SQL query will you give the email address of the first five customers in the Customer table?</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>luisg@embraer.com.br</td>
+</tr>
+<tr class="even">
+<td>leonekohler@surfeu.de</td>
+</tr>
+<tr class="odd">
+<td>ftremblay@gmail.com</td>
+</tr>
+<tr class="even">
+<td>bjorn.hansen@yahoo.no</td>
+</tr>
+<tr class="odd">
+<td>frantisekw@jetbrains.com</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 
