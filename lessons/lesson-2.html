@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Selection Basics – UO Data Services: Introduction to SQL</title>
+<title>Selection Fundamentals – UO Data Services: Introduction to SQL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -106,6 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../include/webex.css">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
@@ -144,6 +145,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../lessons/lesson-1.html">
  <span class="dropdown-text">Introduction</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-2.html">
+ <span class="dropdown-text">Selection Fundamentals</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item">
@@ -167,7 +172,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Selection Basics</h1>
+<h1 class="title">Selection Fundamentals</h1>
 </div>
 
 
@@ -184,226 +189,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introducing-the-workshop-database" class="level2">
-<h2 class="anchored" data-anchor-id="introducing-the-workshop-database">Introducing the Workshop Database</h2>
-<p>Before using SQL to query the data, let’s inspect the structure and contents of our music store database.</p>
-<section id="table-and-field-names" class="level3">
-<h3 class="anchored" data-anchor-id="table-and-field-names">Table and Field Names</h3>
-<section id="album" class="level4">
-<h4 class="anchored" data-anchor-id="album">Album</h4>
-<ul>
-<li>A table of musical albums, each row corresponds to one album</li>
-<li><code>AlbumId</code> — INTEGER</li>
-<li><code>Title</code> — NVARCHAR(160)</li>
-<li><code>ArtistId</code> — INTEGER</li>
-</ul>
-</section>
-<section id="artist" class="level4">
-<h4 class="anchored" data-anchor-id="artist">Artist</h4>
-<ul>
-<li>A table of musical artists, each row corresponds to one artist</li>
-<li><code>ArtistId</code> — INTEGER</li>
-<li><code>Name</code> — NVARCHAR(120)</li>
-</ul>
-</section>
-<section id="customer" class="level4">
-<h4 class="anchored" data-anchor-id="customer">Customer</h4>
-<ul>
-<li>A table of customers, each row corresponds to one customer</li>
-<li><code>CustomerId</code> — INTEGER</li>
-<li><code>FirstName</code> — NVARCHAR</li>
-<li><code>LastName</code> — NVARCHAR</li>
-<li><code>Company</code> — NVARCHAR</li>
-<li><code>Address</code> — NVARCHAR</li>
-<li><code>City</code> — NVARCHAR</li>
-<li><code>State</code> — NVARCHAR</li>
-<li><code>Country</code> — NVARCHAR</li>
-<li><code>PostalCode</code> — NVARCHAR</li>
-</ul>
-</section>
-</section>
-<section id="first-peek-schema-diagrams" class="level3">
-<h3 class="anchored" data-anchor-id="first-peek-schema-diagrams">First Peek: Schema Diagrams</h3>
-<p>Schema diagrams are used to represent relationships between tables in a database.</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="../images/02-schema-diagram.png" class="img-fluid figure-img" width="800"></p>
-<figcaption>A schema diagram for the example music database</figcaption>
-</figure>
-</div>
-<p>The structure of this database will be explained in more detail as more SQL concepts are introduced. Remote attendees will receive a digital copy of this schema diagram, while in-person attendees will receive a handout. Think of this schema diagram as a roadmap to your database!</p>
-</section>
-</section>
-<section id="exploring-the-database-in-beekeeper-studio" class="level2">
-<h2 class="anchored" data-anchor-id="exploring-the-database-in-beekeeper-studio">Exploring the Database in Beekeeper Studio</h2>
-<section id="the-beekeeper-studio-interface" class="level3">
-<h3 class="anchored" data-anchor-id="the-beekeeper-studio-interface">The Beekeeper Studio Interface</h3>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="../images/02-basic-interface.png" class="img-fluid figure-img" width="400"></p>
-<figcaption>The Beekeeper Studio interface</figcaption>
-</figure>
-</div>
-<p>On the left side of Beekeeper Studio, there is a navigation pane with three icons.</p>
-<ul>
-<li>The first, a database symbol, allows you to inspect the structure and properties of the current database.</li>
-<li>The second allows you to see your saved queries. We’ll talk about saving queries shortly.</li>
-<li>Finally, the third allows you to see all the queries you’ve run in the current workspace, including ones you may not have saved.</li>
-</ul>
-</section>
-</section>
-<section id="select-from-and-limit" class="level2">
-<h2 class="anchored" data-anchor-id="select-from-and-limit">SELECT, FROM, and LIMIT</h2>
-<p>For our first query, let’s list the first and last names of each customer known to have purchased music from the store. To do this, we need the keywords <strong>SELECT</strong> and <strong>FROM</strong>.</p>
-<p>Click the <strong>+</strong> button in the Beekeeper Studio editor pane to open a new query console and type the following.</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="../images/02-query-interface.png" class="img-fluid figure-img" width="700"></p>
-<figcaption>A first query in the Beekepeer Studio console</figcaption>
-</figure>
-</div>
-<section id="unpacking-a-first-sql-query" class="level3">
-<h3 class="anchored" data-anchor-id="unpacking-a-first-sql-query">Unpacking a First SQL Query</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> FirstName, LastName </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ul>
-<li><code>FROM</code> is the most important part of the query. It must be followed by the name of a table in the database.</li>
-<li><code>SELECT</code> is followed by comma-separated names of fields within that table.</li>
-<li>Every SQL query ends with a semicolon <code>;</code>.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>SQL is case-insensitive, but it’s best practice to capitalize keywords like <code>SELECT</code> and <code>FROM</code>. It makes it easier to distinguish between keywords and values, which are typically camel case or title case.</p>
-</div>
-</div>
-<p>To change the order of columns in our ourput, we can rewrite the order as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>As a shortcut, we can select all of the columns in a table using <code>*</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>*</code> symbol tells SQL to display all of the fields in the table from left to right.</p>
-</section>
-<section id="controlling-output-with-limit" class="level3">
-<h3 class="anchored" data-anchor-id="controlling-output-with-limit">Controlling Output with <code>LIMIT</code></h3>
-<p>The <code>Customer</code> table has 59 rows, which is more than we want to read at once. Luckily, SQL has keyword that limits the number of rows returned.</p>
-<p>At the end of any SQL command, just before the semicolon, use the keyword <code>LIMIT</code> followed by a number of rows to indicate how many rows we want to return.</p>
-<ul>
-<li><code>LIMIT</code> must be followed by a positive integer.</li>
-</ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>LastName</th>
-<th>FirstName</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Gonçalves</td>
-<td>Luís</td>
-</tr>
-<tr class="even">
-<td>Köhler</td>
-<td>Leonie</td>
-</tr>
-<tr class="odd">
-<td>Tremblay</td>
-<td>François</td>
-</tr>
-<tr class="even">
-<td>Hansen</td>
-<td>Bjørn</td>
-</tr>
-<tr class="odd">
-<td>Wichterlová</td>
-<td>František</td>
-</tr>
-</tbody>
-</table>
-<section id="quiz-try-it-yourself" class="level4">
-<h4 class="anchored" data-anchor-id="quiz-try-it-yourself">Quiz: Try it Yourself</h4>
-<p>What SQL query will you give the email address of the first five customers in the Customer table?</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Email</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>luisg@embraer.com.br</td>
-</tr>
-<tr class="even">
-<td>leonekohler@surfeu.de</td>
-</tr>
-<tr class="odd">
-<td>ftremblay@gmail.com</td>
-</tr>
-<tr class="even">
-<td>bjorn.hansen@yahoo.no</td>
-</tr>
-<tr class="odd">
-<td>frantisekw@jetbrains.com</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="debugging-sql-syntax-and-spelling" class="level3">
-<h3 class="anchored" data-anchor-id="debugging-sql-syntax-and-spelling">Debugging SQL: Syntax and Spelling</h3>
+<section id="debugging-sql-syntax-and-spelling" class="level2">
+<h2 class="anchored" data-anchor-id="debugging-sql-syntax-and-spelling">Debugging SQL: Syntax and Spelling</h2>
 <p>You might have noticed that I’ve been entering each <em>clause</em> in these SQL queries in a specific order. <code>SELECT</code> comes before <code>FROM</code> which comes before <code>LIMIT</code>. This is because the grammar of SQL requires keywords to have a hierarchy and order. We will discuss the syntactic placement of each keyword as new ones are introduced.</p>
 <p>As an example, let’s see what happens if we invert the order of SELECT and FROM in a query.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre class="output"><code>near "FROM": syntax error</code></pre>
 <p>If you get a syntax error message when running a query, inspect the grammar of your query carefully.</p>
 <p>The <code>SELECT</code> keyword must be followed by a <code>*</code> or the name or one or more columns in the table in the <code>FROM</code> clause. If you ask SQL to select a column that doesn’t exist, the query will fail.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> email_address</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> CUSTOMER</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> email_address</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> CUSTOMER</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre class="output"><code>no such column: email_address - Check that you only use double 
 quotes (") for identifiers, not strings</code></pre>
 <p>When you see a <code>no such column</code> error message, check the spelling the name of each field in the SELECT clause. Remember you can use the Entity pane on the left side of Beekeeper Studio or the name and data type of each column in your database at any time; make sure the name matches exactly.</p>
-</section>
 <section id="sorting-with-order-by" class="level3">
 <h3 class="anchored" data-anchor-id="sorting-with-order-by">Sorting with <code>ORDER BY</code></h3>
 <p>We may want to sort the results of a query by a particular column. We can do this in SQL by adding an <code>ORDER BY</code> clause to our query.</p>
 <p><code>ORDER BY</code> must followed by the name of one or more columns, and the <code>ORDER BY</code> clause always comes just before <code>LIMIT</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -426,12 +235,12 @@ quotes (") for identifiers, not strings</code></pre>
 </tr>
 </tbody>
 </table>
-<p>By default, ORDER BY sorts a field in ascending order: numeric fields start with the smallest number, and text fields like varchar start with the string that comes first in the alphabet.</p>
+<p>By default, ORDER BY sorts a field in ascending order: numeric fields start with the smallest number, and textual fields like varchar start with the string that comes first in the alphabet.</p>
 <p>Now, let’s try sorting a numeric field: the <code>UnitPrice</code> of a digital song in dollars and cents.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name, UnitPrice</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name, UnitPrice</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -455,10 +264,10 @@ quotes (") for identifiers, not strings</code></pre>
 </tbody>
 </table>
 <p>Let’s say we want to see the most <em>expensive</em> songs first. That means we need to sort by <code>UnitPrice</code> in descending order. We can indicate this to SQL by adding <code>DESC</code> just after the field we want to sort by.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name, UnitPrice</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice <span class="kw">DESC</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name, UnitPrice</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice <span class="kw">DESC</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -483,9 +292,9 @@ quotes (") for identifiers, not strings</code></pre>
 </table>
 <section id="quiz-the-biggest-purchase" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-the-biggest-purchase">Quiz: The Biggest Purchase</h4>
-<p>Write a query against the <code>Invoice</code> table to find the <code>CustomerId</code>, <code>InvoiceDate</code>, and <code>Total</code> of the single biggest purchase in the database. <em>Hint</em>: You will need to sort by <code>Total</code>.</p>
+<p>Write a query against the <code>Invoice</code> table to find the <code>CustomerId</code>, <code>InvoiceDate</code>, and <code>Total</code> of the single biggest purchase in the database.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -494,12 +303,12 @@ quotes (") for identifiers, not strings</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, InvoiceDate, Total</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Total <span class="kw">DESC</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, InvoiceDate, Total</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Total <span class="kw">DESC</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -519,11 +328,11 @@ quotes (") for identifiers, not strings</code></pre>
 </div>
 </div>
 </div>
-<p>We can even sort by multiple attributes, with a different attribute used to break ties. The following queries sorts by <code>UnitPrice</code> in ascending order, then breaks ties by sorting by track length in milliseconds.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> UnitPrice, Milliseconds</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice, Milliseconds <span class="kw">DESC</span> </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We can even sort by multiple attributes, with a different attribute used to break ties. The following query sorts by <code>UnitPrice</code> in ascending order, then breaks ties by sorting by track length in milliseconds.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> UnitPrice, Milliseconds</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice, Milliseconds <span class="kw">DESC</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -550,12 +359,12 @@ quotes (") for identifiers, not strings</code></pre>
 <section id="quiz-interpreting-error-messages" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-interpreting-error-messages">Quiz: Interpreting Error Messages</h4>
 <p>You have a colleague who wants to find the song with the title that comes last in the alphabet. They come to you with the following query. Why doesn’t this query work, and how can they fix it?</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -564,13 +373,13 @@ quotes (") for identifiers, not strings</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This query has a <em>syntax error</em>. The <code>ORDER BY</code> clause must come before the <code>LIMIT</code>clause for SQL to understand the query.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name <span class="kw">DESC</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name <span class="kw">DESC</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">1</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -586,6 +395,336 @@ quotes (") for identifiers, not strings</code></pre>
 </div>
 </div>
 </div>
+</section>
+</section>
+</section>
+<section id="filtering-with-where" class="level2">
+<h2 class="anchored" data-anchor-id="filtering-with-where">Filtering with <code>WHERE</code></h2>
+<p>So far, we have written queries that isolate specific columns from a table without consideration to which rows are returned.</p>
+<p>The SQL <code>WHERE</code> clause gives us the ability to <em>filter</em> results to records with values that fit specific criteria. The <code>WHERE</code> clause is always followed by a <strong>conditional statement</strong>, something that can be evaluated as True or False.</p>
+<ul>
+<li>SQL has six available logical operators: <code>=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>&gt;</code>, and <code>!=</code>. <code>=</code> is a test for equality, and <code>!=</code> means “not equal to”.</li>
+</ul>
+<p>For example, the following query returns the <code>CustomerId</code> and <code>Total</code> from the rows of the <code>Invoice</code> table which <code>Total</code> was greater than $20.00.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, Total</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Total <span class="op">&gt;</span> <span class="dv">20</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CustomerId</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>45</td>
+<td>21.86</td>
+</tr>
+<tr class="even">
+<td>46</td>
+<td>21.86</td>
+</tr>
+<tr class="odd">
+<td>26</td>
+<td>23.86</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>25.86</td>
+</tr>
+</tbody>
+</table>
+<p>The following query returns all the tracks in the <code>Track</code> table with the value <code>Carlos Santana</code> in the <code>Composer</code> field.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> TrackId, Name, Composer</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Composer <span class="op">=</span> <span class="st">'Carlos Santana'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>Name</th>
+<th>Composer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2423</td>
+<td>Persuasion</td>
+<td>Carlos Santana</td>
+</tr>
+<tr class="even">
+<td>2425</td>
+<td>Soul Sacrifice</td>
+<td>Carlos Santana</td>
+</tr>
+<tr class="odd">
+<td>2427</td>
+<td>Santana Jam</td>
+<td>Carlos Santana</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Valid strings in SQL must use single quotes. When writing <code>WHERE</code> clauses, use strings in the form <code>'value'</code>, not <code>"value"</code>.</p>
+</div>
+</div>
+<p>The database manager executes this query in two stages. First, it checks at each row in the <code>Track</code> table to see which ones have a <code>Composer</code> equal to <code>'Carlos Santana'</code>. Then, it uses the column names following the <code>SELECT</code> keyword to determine which columns to display.</p>
+<p>This ordering means we can filter records using <code>WHERE</code> based on values in columns that aren’t displayed.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> TrackId</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">From</span> Track</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">Where</span> Composer <span class="op">=</span> <span class="st">'Carlos Santana'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2423</td>
+</tr>
+<tr class="even">
+<td>2425</td>
+</tr>
+<tr class="odd">
+<td>2427</td>
+</tr>
+</tbody>
+</table>
+<p>A handy aspect of the <code>datetime</code> data type is that dates can be compared and sorted. Be careful to use leading zeroes to pad your dates.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, Total, InvoiceDate</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> InvoiceDate <span class="op">&lt;</span> <span class="st">'2021-01-05'</span> <span class="co">-- Dates are in YYYY-MM-DD order!</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> InvoiceDate <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CustomerId</th>
+<th>Total</th>
+<th>InvoiceDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8</td>
+<td>5.94</td>
+<td>2021-01-03 00:00:00</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>3.96</td>
+<td>2021-01-02 00:00:00</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>1.98</td>
+<td>2021-01-01 00:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>WHERE</code> clause is always applied after <code>FROM</code> but <em>before</em> <code>SELECT</code>, <code>ORDER BY</code>, and <code>LIMIT</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> ArtistId, Name</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> ArtistId <span class="op">&gt;</span> <span class="dv">6</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">By</span> ArtistId</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>ArtistId</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7</td>
+<td>Apocalyptica</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Audioslave</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>BackBeat</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Billy Cobham</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Black Label Society</td>
+</tr>
+</tbody>
+</table>
+<section id="quiz-simple-where-clauses" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-simple-where-clauses">Quiz: Simple <code>WHERE</code> Clauses</h4>
+<p>Find the <code>CustomerId</code>, <code>FirstName</code>, and <code>LastName</code> of all customers in the database with the first name <code>'Frank'</code>, sorted by last name in ascending order.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, FirstName, LastName</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> FirstName <span class="op">=</span> <span class="st">'Frank'</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> LastName;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CustomerId</th>
+<th>FirstName</th>
+<th>LastName</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>16</td>
+<td>Frank</td>
+<td>Harris</td>
+</tr>
+<tr class="even">
+<td>24</td>
+<td>Frank</td>
+<td>Ralston</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="pattern-matching-with-like" class="level3">
+<h3 class="anchored" data-anchor-id="pattern-matching-with-like">Pattern Matching with <code>LIKE</code></h3>
+<p>Textual data is complicated. We often want to retrieve <em>approximate</em> matches in a <code>WHERE</code> clause because of the messy nature of textual values like descriptions, names, and titles.</p>
+<p>For example, when we looked for tracks composed by Carlos Santana in the Track table, we could only retrieve songs with precisely the value <code>'Carlos Santata'</code>, a choice that excludes collaborations in forms like <code>'R. Taha, Carlos Santana &amp; T. Lindsay'</code>.</p>
+<p>We can use the <code>LIKE</code> keyword to express fuzzy matching. Remember that a character can be a space, letter, or even a symbol.</p>
+<ul>
+<li><code>%</code> - matches any characters of length 0 or more</li>
+<li><code>_</code> - matches any <em>one</em> character</li>
+</ul>
+<p>Let’s rewrite our first <code>WHERE</code> query to capture Carlos Santana’s collaborative efforts.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name, Composer</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Composer <span class="kw">LIKE</span> <span class="st">'%Carlos Santana%'</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Composer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Composer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Persuasion</td>
+<td>Carlos Santana</td>
+</tr>
+<tr class="even">
+<td>Soul Sacrifice</td>
+<td>Carlos Santana</td>
+</tr>
+<tr class="odd">
+<td>Santana Jam</td>
+<td>Carlos Santana</td>
+</tr>
+<tr class="even">
+<td>The Calling</td>
+<td>Carlos Santana &amp; C. Thompson</td>
+</tr>
+<tr class="odd">
+<td>Love Of My Life</td>
+<td>Carlos Santana &amp; Dave Matthews</td>
+</tr>
+<tr class="even">
+<td>El Farol</td>
+<td>Carlos Santana &amp; KC Porter</td>
+</tr>
+<tr class="odd">
+<td>Africa Bamba</td>
+<td>I. Toure, S. Tidiane Toure, Carlos Santana &amp; K. Perazzo</td>
+</tr>
+<tr class="even">
+<td>Migra</td>
+<td>R. Taha, Carlos Santana &amp; T. Lindsay</td>
+</tr>
+<tr class="odd">
+<td>Maria Maria</td>
+<td>W. Jean, J. Duplessis, Carlos Santana, K. Perazzo &amp; R. Rekow</td>
+</tr>
+</tbody>
+</table>
+<p>Keep in mind that, by default, patterns with letters in SQLite are case-insensitive. The pattern <code>'%And%'</code> matches both <code>Andy</code> and <code>Cat and Dog</code>.</p>
+<section id="quiz-wildcard-practice" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-wildcard-practice">Quiz: Wildcard Practice</h4>
+<p>Which of the following patterns would match the string <code>'Sandwich'</code> if used with <code>LIKE</code> in a <code>WHERE</code> clause?</p>
+<div id="radio_CIATDDYLBR" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CIATDDYLBR" value=""> <span>Sa%witch</span></label><label><input type="radio" autocomplete="off" name="radio_CIATDDYLBR" value="answer"> <span>Sandwi__</span></label><label><input type="radio" autocomplete="off" name="radio_CIATDDYLBR" value=""> <span>'_Sandwich'</span></label>
+</div>
+</section>
+<section id="caveat-escape-characters" class="level4">
+<h4 class="anchored" data-anchor-id="caveat-escape-characters">Caveat: Escape Characters</h4>
+<p>SQL strings are always wrapped in single-quotes. This is unfortunate when we want to express words that contain conjuctions like the words <code>can't</code> or <code>don't</code>.</p>
+<p>Let’s say I want to find the first five songs (in alphabetical order) in the database that begin with the word <code>Don't</code>.</p>
+<p>A naive attempt would look something like this: it produces a syntax error.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Name <span class="kw">LIKE</span> <span class="st">'Don'</span>t %<span class="st">'</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY Name</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">LIMIT 5;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>near "t": syntax error</code></pre>
+<p>We need to tell SQL that the apostrophe in <code>Don't</code> is part of the pattern. To do this, use a second apostrophe to <em>escape</em> the quote.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Name <span class="kw">LIKE</span> <span class="st">'Don</span><span class="ch">''</span><span class="st">t %'</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Name</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Don’t Cry</td>
+</tr>
+<tr class="even">
+<td>Don’t Cry (Original)</td>
+</tr>
+<tr class="odd">
+<td>Don’t Damn Me</td>
+</tr>
+<tr class="even">
+<td>Don’t Forget Me</td>
+</tr>
+<tr class="odd">
+<td>Don’t Go Away Mad (Just Go Away)</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
@@ -593,6 +732,212 @@ quotes (") for identifiers, not strings</code></pre>
 </section>
 
 </main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -665,7 +1010,7 @@ quotes (") for identifiers, not strings</code></pre>
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/wintere\.github\.io\/intro-sql\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -998,7 +1343,7 @@ quotes (") for identifiers, not strings</code></pre>
     <div class="nav-footer-left">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/wintere/intro_to_sql">
+    <a class="nav-link" href="https://github.com/wintere/intro-sql">
       <i class="bi bi-github" role="img">
 </i> 
     </a>
