@@ -1,0 +1,361 @@
+---
+title: "Selection Fundamentals"
+format: html
+---
+
+## Debugging SQL: Syntax and Spelling
+You might have noticed that I've been entering each *clause* in these SQL
+queries in a specific order. `SELECT` comes before `FROM` which comes before `LIMIT`.
+This is because the grammar of SQL requires keywords to have a hierarchy and order.
+We will discuss the syntactic placement of each keyword as new ones are introduced.
+
+As an example, let's see what happens if we invert the order of SELECT and FROM in a query.
+```sql
+FROM Customer
+SELECT Email
+LIMIT 5;
+```
+```output
+near "FROM": syntax error
+```
+If you get a syntax error message when running a query, inspect the grammar of your 
+query carefully.
+
+The `SELECT` keyword must be followed by a `*` or the name or one or more columns in
+the table in the `FROM` clause. If you ask SQL to select a column that doesn't exist,
+the query will fail.
+
+```sql
+SELECT email_address
+FROM CUSTOMER
+LIMIT 5;
+```
+```output
+no such column: email_address - Check that you only use double 
+quotes (") for identifiers, not strings
+```
+When you see a `no such column` error message, check the spelling the
+name of each field in the SELECT clause. Remember you can use the
+Entity pane on the left side of Beekeeper Studio or the name and data type of 
+each column in your database at any time; make sure the name matches exactly.
+
+### Sorting with `ORDER BY`
+We may want to sort the results of a query by a particular column. 
+We can do this in SQL by adding an `ORDER BY` clause to our query.
+
+`ORDER BY` must followed by the name of one or more columns, and the
+`ORDER BY` clause always comes just before `LIMIT`.
+
+```sql
+SELECT *
+FROM Artist
+ORDER BY Name
+LIMIT 3;
+```
+| ArtistId | Name                                      |
+| -------- | ----------------------------------------- |
+| 43       | A Cor Do Som                              |
+| 1        | AC/DC                                     |
+| 230      | Aaron Copland & London Symphony Orchestra |
+
+By default, ORDER BY sorts a field in ascending order: numeric fields
+start with the smallest number, and textual fields like varchar start with
+the string that comes first in the alphabet.
+
+Now, let's try sorting a numeric field: the `UnitPrice` of a digital
+song in dollars and cents.
+
+```sql
+SELECT Name, UnitPrice
+FROM Track
+ORDER BY UnitPrice
+LIMIT 3;
+```
+| Name                                    | UnitPrice |
+| --------------------------------------- | --------- |
+| For Those About To Rock (We Salute You) | 0.99      |
+| Balls to the Wall                       | 0.99      |
+| Fast As a Shark                         | 0.99      |
+
+Let's say we want to see the most *expensive* songs first. That
+means we need to sort by `UnitPrice` in descending order. We
+can indicate this to SQL by adding `DESC` just after the field
+we want to sort by.
+
+```sql
+SELECT Name, UnitPrice
+FROM Track
+ORDER BY UnitPrice DESC
+LIMIT 3;
+```
+| Name                                   | UnitPrice |
+| -------------------------------------- | --------- |
+| Battlestar Galactica: The Story So Far | 1.99      |
+| Occupation / Precipice                 | 1.99      |
+| Exodus, Pt. 1                          | 1.99      |
+
+#### Quiz: The Biggest Purchase
+Write a query against the `Invoice` table to find the `CustomerId`, `InvoiceDate`,
+and `Total` of the single biggest purchase in the database.
+
+::: {.callout-tip collapse="true"}
+## Answer
+```sql
+SELECT CustomerId, InvoiceDate, Total
+FROM Invoice
+ORDER BY Total DESC
+LIMIT 1;
+```
+| CustomerId | InvoiceDate         | Total |
+| ---------- | ------------------- | ----- |
+| 6          | 2025-11-13 00:00:00 | 25.86 |
+:::
+
+We can even sort by multiple attributes, with a different attribute used
+to break ties. The following query sorts by `UnitPrice` in ascending
+order, then breaks ties by sorting by track length in milliseconds.
+
+```sql
+SELECT UnitPrice, Milliseconds
+FROM Track
+ORDER BY UnitPrice, Milliseconds DESC 
+LIMIT 3;
+```
+| UnitPrice | Milliseconds |
+| --------- | ------------ |
+| 0.99      | 1612329      |
+| 0.99      | 1196094      |
+| 0.99      | 1116734      |
+
+#### Quiz: Interpreting Error Messages
+You have a colleague who wants to find the song with the title that comes last
+in the alphabet. They come to you with the following query.
+Why doesn't this query work, and how can they fix it?
+
+```sql
+SELECT Name
+FROM Track
+LIMIT 1
+ORDER BY Name DESC;
+```
+::: {.callout-tip collapse="true"}
+## Answer
+This query has a *syntax error*. The `ORDER BY` clause must come before
+the `LIMIT`clause for SQL to understand the query.
+```sql
+SELECT Name
+FROM Track
+ORDER BY Name DESC
+LIMIT 1;
+```
+| Name                |
+| ------------------- |
+| Último Pau-De-Arara |
+:::
+
+## Filtering with `WHERE`
+
+So far, we have written queries that isolate specific columns from a table without
+consideration to which rows are returned.
+
+The SQL `WHERE` clause gives us the ability to *filter* results
+to records with values that fit specific criteria. The `WHERE`
+clause is always followed by a **conditional statement**, something that can be
+evaluated as True or False.
+
+* SQL has six available logical operators: `=`,
+`<`, `<=`, `>=`, `>`, and `!=`. `=` is a test for equality, and
+`!=` means "not equal to".
+
+For example, the following query returns the `CustomerId` and `Total` from the rows
+of the `Invoice` table which `Total` was greater than $20.00.
+
+```sql
+SELECT CustomerId, Total
+FROM Invoice
+WHERE Total > 20;
+```
+| CustomerId | Total |
+| ---------- | ----- |
+| 45         | 21.86 |
+| 46         | 21.86 |
+| 26         | 23.86 |
+| 6          | 25.86 |
+
+The following query returns all the tracks in the `Track` table
+with the value `Carlos Santana` in the `Composer` field.
+
+```sql
+SELECT TrackId, Name, Composer
+FROM Track 
+WHERE Composer = 'Carlos Santana';
+```
+| TrackId | Name           | Composer       |
+| ------- | -------------- | -------------- |
+| 2423    | Persuasion     | Carlos Santana |
+| 2425    | Soul Sacrifice | Carlos Santana |
+| 2427    | Santana Jam    | Carlos Santana |
+
+::: {.callout-important}
+Valid strings in SQL must use single quotes. When
+writing `WHERE` clauses, use strings in the form `'value'`, not `"value"`.
+:::
+ 
+The database manager executes this query in two stages. 
+First, it checks at each row in the `Track` table to see which ones have a 
+`Composer` equal to `'Carlos Santana'`.
+Then, it uses the column names following the `SELECT` keyword to determine 
+which columns to display.
+
+This ordering means we can filter records using `WHERE` based on values 
+in columns that aren’t displayed.
+
+```sql
+SELECT TrackId
+From Track
+Where Composer = 'Carlos Santana'
+```
+| TrackId |
+| ------- |
+| 2423    |
+| 2425    |
+| 2427    |
+
+A handy aspect of the `datetime` data type is that dates can
+be compared and sorted. Be careful to use leading zeroes
+to pad your dates.
+
+```sql
+SELECT CustomerId, Total, InvoiceDate
+FROM Invoice
+WHERE InvoiceDate < '2021-01-05' -- Dates are in YYYY-MM-DD order!
+ORDER BY InvoiceDate DESC;
+```
+| CustomerId | Total | InvoiceDate         |
+| ---------- | ----- | ------------------- |
+| 8          | 5.94  | 2021-01-03 00:00:00 |
+| 4          | 3.96  | 2021-01-02 00:00:00 |
+| 2          | 1.98  | 2021-01-01 00:00:00 |
+
+The `WHERE` clause is always applied after `FROM` but *before* `SELECT`, `ORDER BY`, and `LIMIT`.
+
+```sql
+SELECT ArtistId, Name
+FROM Artist
+WHERE ArtistId > 6
+ORDER By ArtistId
+LIMIT 5;
+```
+| ArtistId | Name                |
+| -------- | ------------------- |
+| 7        | Apocalyptica        |
+| 8        | Audioslave          |
+| 9        | BackBeat            |
+| 10       | Billy Cobham        |
+| 11       | Black Label Society |
+
+#### Quiz: Simple `WHERE` Clauses
+
+Find the `CustomerId`, `FirstName`, and `LastName` of all
+customers in the database with the first name `'Frank'`,
+sorted by last name in ascending order.
+
+::: {.callout-tip collapse="true"}
+## Answer 
+```sql
+SELECT CustomerId, FirstName, LastName
+FROM Customer
+WHERE FirstName = 'Frank'
+ORDER BY LastName;
+```
+| CustomerId | FirstName | LastName |
+| ---------- | --------- | -------- |
+| 16         | Frank     | Harris   |
+| 24         | Frank     | Ralston  |
+:::
+
+### Pattern Matching with `LIKE`
+Textual data is complicated. We often want to retrieve *approximate* matches in a `WHERE` clause because
+of the messy nature of textual values like descriptions, names, and titles.
+
+For example, when we looked for tracks composed by Carlos Santana in the Track table, we could only retrieve
+songs with precisely the value `'Carlos Santata'`, a choice that excludes collaborations in forms like
+`'R. Taha, Carlos Santana & T. Lindsay'`.
+
+We can use the `LIKE` keyword to express fuzzy matching. Remember that a character can be a space, letter, or even a symbol.
+
+* `%` - matches any characters of length 0 or more
+* `_` - matches any *one* character
+
+Let's rewrite our first `WHERE` query to capture Carlos Santana's collaborative efforts.
+
+```sql
+SELECT Name, Composer
+FROM Track
+WHERE Composer LIKE '%Carlos Santana%'
+ORDER BY Composer;
+```
+| Name            | Composer                                                     |
+| --------------- | ------------------------------------------------------------ |
+| Persuasion      | Carlos Santana                                               |
+| Soul Sacrifice  | Carlos Santana                                               |
+| Santana Jam     | Carlos Santana                                               |
+| The Calling     | Carlos Santana & C. Thompson                                 |
+| Love Of My Life | Carlos Santana & Dave Matthews                               |
+| El Farol        | Carlos Santana & KC Porter                                   |
+| Africa Bamba    | I. Toure, S. Tidiane Toure, Carlos Santana & K. Perazzo      |
+| Migra           | R. Taha, Carlos Santana & T. Lindsay                         |
+| Maria Maria     | W. Jean, J. Duplessis, Carlos Santana, K. Perazzo & R. Rekow |
+
+Keep in mind that, by default, patterns with letters in SQLite are case-insensitive. 
+The pattern `'%And%'` matches both `Andy` and `Cat and Dog`.
+
+#### Quiz: Wildcard Practice
+Which of the following patterns would match the string `'Sandwich'` if used
+with `LIKE` in a `WHERE` clause?
+```{r, echo=FALSE}
+opts_p <- c(
+   "Sa%witch",
+   answer = "Sandwi__",
+   "'_Sandwich'"
+)
+```
+
+`r longmcq(opts_p)`
+
+#### Caveat: Escape Characters
+SQL strings are always wrapped in single-quotes. This is unfortunate when we want to 
+express words that contain conjuctions like the words `can't` or `don't`. 
+
+Let's say I want to find the first five songs (in alphabetical order) in the database that begin with the word `Don't`. 
+
+A naive attempt would look something like this: it produces a syntax error.
+```sql
+SELECT Name
+FROM Track
+WHERE Name LIKE 'Don't %'
+ORDER BY Name
+LIMIT 5;
+```
+```output
+near "t": syntax error
+```
+
+We need to tell SQL that the apostrophe in `Don't` is part of the pattern. 
+To do this, use a second apostrophe to *escape* the quote.
+
+```sql
+SELECT Name
+FROM Track
+WHERE Name LIKE 'Don''t %'
+ORDER BY Name
+LIMIT 5;
+```
+| Name                             |
+| -------------------------------- |
+| Don't Cry                        |
+| Don't Cry (Original)             |
+| Don't Damn Me                    |
+| Don't Forget Me                  |
+| Don't Go Away Mad (Just Go Away) |
+

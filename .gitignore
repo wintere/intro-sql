@@ -3,3 +3,4 @@ docs/
 /.quarto/
 _site/
 **/*.quarto_ipynb
+.Rproj.user

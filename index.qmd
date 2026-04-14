@@ -12,9 +12,9 @@ No experience with SQL required, though participants may benefit from familiarit
 
 ## Sessions
 
-* April 7, 2026, 1pm—2pm
-* April 9, 2026, 1pm—2pm
-* April 14, 2026, 1pm—2pm
-* April 16, 2026, 1pm—2pm
-* April 21, 2026, 1pm—2pm
-* April 23, 2026, 1pm—2pm
+* April 7, 2026, 1pm—2pm: Setup, Introduction
+* April 9, 2026, 1pm—2pm: Selection Fundamentals
+* April 14, 2026, 1pm—2pm: TBA
+* April 16, 2026, 1pm—2pm: TBA
+* April 21, 2026, 1pm—2pm: TBA
+* April 23, 2026, 1pm—2pm: TBA

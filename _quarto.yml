@@ -1,33 +1,35 @@
 project:
   type: website
-
 website:
-  title: "UO Data Services: Introduction to SQL"
+  title: 'UO Data Services: Introduction to SQL'
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - href: setup.qmd
-        text: "Setup"
-      - text: "Lessons"
-        menu:
-          - text: "Introduction"
-            href: lessons/lesson-1.html
-      - href: credits.qmd
-        text: Credits 
+    - href: index.qmd
+      text: Home
+    - href: setup.qmd
+      text: Setup
+    - text: Lessons
+      menu:
+      - text: Introduction
+        href: lessons/lesson-1.html
+      - text: Selection Fundamentals
+        href: lessons/lesson-2.html
+    - href: credits.qmd
+      text: Credits
   page-footer:
     left:
-      - icon: github
-        href: https://github.com/wintere/intro_to_sql
-    right:
-        <a href="https://library.uoregon.edu/data-services">UO Data Services</a>
+    - icon: github
+      href: https://github.com/wintere/intro-sql
+    right: <a href="https://library.uoregon.edu/data-services">UO Data Services</a>
 format:
   html:
     theme: zephyr
-    css: styles.css
+    css:
+    - styles.css
+    - include/webex.css
     toc: false
     code-copy: true
-
+    include-after-body: include/webex.js
 publish:
   github:
     branch: main
