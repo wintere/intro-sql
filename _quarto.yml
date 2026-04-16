@@ -14,6 +14,8 @@ website:
         href: lessons/lesson-1.html
       - text: Selection Fundamentals
         href: lessons/lesson-2.html
+      - text: Intermediate Selection
+        href: lessons/lesson-3.html
     - href: credits.qmd
       text: Credits
   page-footer:

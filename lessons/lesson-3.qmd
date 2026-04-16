@@ -1,0 +1,452 @@
+---
+title: "Intermediate Selection"
+format: html
+---
+
+## Combining Conditions in the WHERE Clause
+
+What if we want to express something more complicated in the `WHERE` clause? For example,
+how do we filter rows that require conditions to be fulfilled by multiple fields?
+
+We can use the logical operators `OR`, `AND`, and `NOT` to combine conditions
+in our `WHERE` clause. Use parantheses to express to SQL how you want these conditions to be combined.
+
+* `(COND 1) AND (COND 2)` will return only rows where *both* `COND1` and `COND2` are true.
+* `(COND 1) OR (COND 2)` will return only rows where *either* `COND1` or `COND2` are true.
+* `NOT(COND 1)` will return only rows where `COND1` is false.
+
+The following query returns all the tracks that begin with the word `Love` *and* have a file size
+larger than 10MB, or 10000000 bytes.
+
+```sql
+SELECT Name, Bytes
+FROM Track
+WHERE (Name LIKE 'Love%') AND (Bytes > 10000000);
+```
+| Name                | Bytes    |
+| ------------------- | -------- |
+| Love In An Elevator | 10552051 |
+| Love, Hate, Love    | 12575396 |
+| Loverman            | 15446975 |
+| Love Is Blind       | 11409720 |
+| Love Of My Life     | 11634337 |
+| Love Bites          | 11305791 |
+| Love                | 10729824 |
+| Love Rescue Me      | 12508716 |
+
+#### Quiz: Combining Conditions in `WHERE` Clauses
+
+Let's say you're interested in tracks that are either
+very long (greater than 600000 milliseconds) or very short
+(less than 30000 milliseconds). Write a query that finds
+the `TrackId`, `Name`, and `Milliseconds` of these songs,
+ordered by `Name`, limited to the first ten results.
+
+::: {.callout-tip collapse="true"}
+## Answer 
+```sql
+SELECT TrackId, Name, Milliseconds
+FROM Track
+WHERE (Milliseconds >= 600000) OR (Milliseconds <= 30000)
+ORDER BY Name
+LIMIT 10;
+```
+| TrackId | Name                             | Milliseconds |
+| ------- | -------------------------------- | ------------ |
+| 2918    | "?"                              | 2782333      |
+| 2869    | ...And Found                     | 2563833      |
+| 2906    | ...In Translation                | 2604575      |
+| 3166    | .07%                             | 2585794      |
+| 3209    | A Benihana Christmas, Pts. 1 & 2 | 2519436      |
+| 2833    | A Day In the Life                | 2620245      |
+| 2825    | A Measure of Salvation           | 2563938      |
+| 170     | A Statistic                      | 6373         |
+| 2857    | A Tale of Two Cities             | 2636970      |
+| 2872    | Abandoned                        | 2587041      |
+:::
+
+## What About `NULL`?
+`NULL` is a special value in SQL to indicate that something is not complete. It is not zero, and isn't
+a bad thing. 
+
+Null values can represent values that may be:
+
+* undefined
+* unknown
+* unapplicable
+
+Take the `Customer` table. Some customers have a known company affiliation in the `Company` field,
+but not every customer could be expected to have a business. What about unemployed customers?
+Or users who simply chose not to provide where they work?
+For those rows, a `NULL` value makes the most sense.
+
+```sql
+SELECT CustomerId, LastName, Company 
+FROM Customer 
+LIMIT 3;
+```
+| CustomerId | LastName  | Company                                          |
+| ---------- | --------- | ------------------------------------------------ |
+| 1          | Gonçalves | Embraer - Empresa Brasileira de Aeronáutica S.A. |
+| 2          | Köhler    | null                                             |
+| 3          | Tremblay  | null                                             |
+
+
+
+#### Using `IS NULL` and `NOT NULL`
+You can't identify null values in the `WHERE` clause using 
+`=` or `!=` because null is not equal to (or equal to) any real value.
+
+```sql
+SELECT FirstName, Company
+FROM Customer
+WHERE Company=NULL
+LIMIT 3;
+```
+```output
+Query 1/1: No results. 0 rows affected.
+```
+
+The query above gives misleading results. From a manual inspection of the table
+in the Beekeeper Studio data tab, we can see that plenty of rows have `NULL`
+for the company attribute.
+
+Instead, we identify NULL values in the `WHERE` using `is NULL`
+and `is not NULL`.
+
+```sql
+SELECT FirstName, Company
+FROM Customer
+WHERE Company is NULL
+LIMIT 3;
+```
+| FirstName | Company |
+| --------- | ------- |
+| Leonie    | null    |
+| François  | null    |
+| Bjørn     | null    |
+
+Null values are never included when filtering with the comparatives (`<`, `=`, etc. ) we've learned
+so far. 
+
+If you're using a `WHERE` clause with a comparative operator and *do*
+want to include NULL values in your set, use `IS NULL` and `OR`.
+
+```sql
+SELECT FirstName, Company
+FROM Customer
+WHERE (Company NOT LIKE 'Apple%') OR (Company is NULL)
+LIMIT 3;
+```
+| FirstName | Company                                          |
+| --------- | ------------------------------------------------ |
+| Luís      | Embraer - Empresa Brasileira de Aeronáutica S.A. |
+| Leonie    | null                                             |
+| François  | null                                             |
+
+#### Debugging Practice: I Don't Want These Nulls!
+You have a colleague who wants to find the first five
+companies in your customer dataset in alphabetical order.
+When running the following query, they get only nulls
+in their results. How can they fix it?
+
+```sql
+SELECT Company
+FROM Customer
+ORDER BY Company
+LIMIT 5;
+```
+| Company |
+| ------- |
+| null    |
+| null    |
+| null    |
+| null    |
+| null    |
+
+
+::: {.callout-tip collapse="true"}
+## Answer 
+When sorting NVARCHAR (string) fields in ascending order, null
+values always come first. However, your colleague is interested
+in non-null values. Add the `WHERE` clause to narrow this query.
+
+```sql
+SELECT Company
+FROM Customer
+WHERE Company is NOT NULL
+ORDER BY Company
+LIMIT 5;
+```
+| Company                                          |
+| ------------------------------------------------ |
+| Apple Inc.                                       |
+| Banco do Brasil S.A.                             |
+| Embraer - Empresa Brasileira de Aeronáutica S.A. |
+| Google Inc.                                      |
+| JetBrains s.r.o.                                 |
+:::
+
+## Using SQL Functions with SELECT
+We can now retrieve *values* from relational database tables
+with a lot of flexibility, but what about manipulating them?
+SQL has a number of *aggregation* functions that collapse
+one or more values into a single value.
+
+* AVG() - average value
+* MIN() - minimum value
+* MAX() - max value
+* COUNT() - the number of values
+* SUM() - the sum of a set of values
+
+Let's start with the task of computing the largest `Total` in the `Invoice` table. You learned a way
+to compute this with sorting, but we the same result more effeciently using
+`MAX()`.
+
+```sql
+SELECT MAX(Total)
+FROM Invoice;
+```
+| MAX(Total) |
+| ---------- |
+| 25.86      |
+
+`MIN()` can be used the same way, and it is compatible with both numeric and textual (varchar)
+fields.
+
+```sql
+SELECT MIN(FirstName)
+FROM Customer;
+```
+| MIN(FirstName) |
+| -------------- |
+| Aaron          |
+
+Using `COUNT(*)` in queries without a `WHERE` clause computes the
+number of rows in the results. Using `COUNT(field_name)` computes
+the number of non-null values for that particular field.
+
+This query gives the total number of rows in `Track`.
+
+```sql
+SELECT COUNT(*)
+FROM Track;
+```
+| COUNT(*) |
+| -------- |
+| 3503     |
+
+`COUNT(*)` can also be used as shorthand to return the number
+of rows for which a `WHERE` clause is TRUE. 
+
+For example, this query returns *how many* customers have no associated `Company`,
+that is where `Company` is null.
+```sql
+SELECT COUNT(*)
+FROM Customer
+WHERE Company is NULL;
+```
+| COUNT(*) |
+| -------- |
+| 49       |
+
+Aggregation in SQL always happens after filtering, so it can be used in 
+combination with the `WHERE` clause to get aggregated values over a specific subset of rows. 
+
+Let's compute the average value of `Total` for Invoices with the `BillingCountry`
+of `Germany`.
+
+```sql
+SELECT AVG(Total)
+FROM Invoice
+WHERE BillingCountry='Germany';
+```
+| AVG(Total)        |
+| ----------------- |
+| 5.588571428571428 |
+
+Say we want to find the total revenue of our music store
+in March 2022. That means we need to sum the `Total` for all rows in the `Invoice`
+with an `InvoiceDate` between March 1st and March 31st.
+
+```sql
+SELECT SUM(Total)
+FROM Invoice
+WHERE (InvoiceDate >= '2022-03-01') AND (InvoiceDate <= '2022-03-31');
+```
+| SUM(Total) |
+| ---------- |
+| 44.62      |
+
+#### Quiz: Counting Rows with Filters
+Write a query that counts the number of rows in the Customer
+table in which `FirstName` begins with the letter `F`.
+
+**Challenge**: Write a query that counts the number of rows
+in the Customer table in which `FirstName` begins with the letter
+`F` *and* is exactly five letters long.
+
+::: {.callout-tip collapse="true"}
+## Answer 
+```sql
+SELECT COUNT(*)
+FROM Customer
+WHERE FirstName LIKE 'F%';
+```
+| COUNT(*) |
+| -------- |
+| 6        |
+
+The challenge answer is as follows.
+```sql
+SELECT COUNT(*)
+FROM CUSTOMER
+WHERE FirstName LIKE 'F____';
+```
+| COUNT(*) |
+| -------- |
+| 2        |
+:::
+
+### Using `AS` in the SELECT Clause
+Have you noticed the `COUNT(*)` in our results looks messy? A client
+might prefer a result that says something `Sum` or `Total` or even `MonthlyRevenue`
+instead.
+
+SQL allows you to rename attributes (or even tables) on the fly using *aliases*. 
+Let's say we want to the compute the sum of all `Total` values from the `Invoice` table.
+
+```sql
+SELECT SUM(Total)
+FROM Invoice
+```
+| SUM(Total) |
+| ---------- |
+| 2328.6     |
+
+Using `AS`, we can give our output a temporary name. 
+
+```sql
+SELECT SUM(Total) AS TotalRevenue
+FROM Invoice;
+```
+| TotalRevenue |
+| ------------ |
+| 2328.6       |
+
+Notice that the numeric result of the query didn't actually change,
+only how SQL represented it to us. The table itself didn't change
+either.s
+
+### Simple Math and Concatenation in SQL 
+Mathematical operations like addition, multiplication,
+and division by numerical constants can be performed within the 
+`SELECT` clause, provided they can be applied to all values 
+in the column.
+
+* `*` multiplication
+* `/` division
+* `+` addition
+* `-` subtraction
+
+In the query below, we divide the length of each song in milliseconds
+by 60000 with `/`, giving us the length of the song in minutes. Then, we
+use an alias to give the result the name `LengthMinutes`.
+
+```sql
+SELECT Name, Milliseconds/60000.0 as LengthMinutes
+FROM Track
+LIMIT 3;
+```
+| Name                                    | LengthMinutes     |
+| --------------------------------------- | ----------------- |
+| For Those About To Rock (We Salute You) | 5.72865           |
+| Balls to the Wall                       | 5.709366666666667 |
+| Fast As a Shark                         | 3.84365           |
+
+The mathematical operators above should only be used with *numeric* columns. 
+SQLite will not error out, but it will perform undesirable or unexpected behaviors.
+
+If you are interested in manipulating fields with textual data types `varchar`, consider
+concatenation. The string concatenation operator `||` combines strings from left to right.
+
+```sql
+SELECT Name || ' another string' AS Concatenated
+FROM Track
+LIMIT 3;
+```
+| Concatenated                                           |
+| ------------------------------------------------------ |
+| For Those About To Rock (We Salute You) another string |
+| Balls to the Wall another string                       |
+| Fast As a Shark another string                         |
+
+### Functions and `NULL`
+Aggregation functions that combine several values into one 
+such as `MIN()`, `MAX()`, `COUNT()` ignore `NULL` values. 
+
+```sql
+SELECT MIN(BillingState)
+FROM Invoice;
+```
+| MIN(BillingState) |
+| ----------------- |
+| AB                |
+
+Any value added, multiplied, concatenated, divided by and so on to `NULL` is
+also `NULL`. 
+
+Compare these results of these two queries. What happens
+to rows in which `BillingState` is `NULL` when `is a state` is concatenated?
+```sql
+SELECT BillingState
+FROM Invoice
+LIMIT 5;
+```
+| BillingState |
+| ------------ |
+| null         |
+| null         |
+| null         |
+| AB           |
+| MA           |
+
+```sql
+SELECT BillingState || ' is a state'
+FROM Invoice
+LIMIT 5;
+```
+| BillingState || ' is a state' |
+| ----------------------------- |
+| null                          |
+| null                          |
+| null                          |
+| AB is a state                 |
+| MA is a state                 |
+
+#### Quiz: Conversion and Aliases
+Let's say you want to measure the impact of your music store in
+Argentina. As of 2026, a dollar is about 1382 Argentinian Pesos.
+
+Select the `InvoiceId`, `BillingCountry`, `Total` and an alias
+called `TotalPesos` from the `Invoice` table for all rows with
+a `BillingCountry` of `Argentina`. Order by `TotalPesos` descending.
+
+::: {.callout-tip collapse="true"}
+## Answer 
+```sql
+SELECT InvoiceId, BillingCountry, Total, Total * 1382 AS TotalPesos
+FROM Invoice
+WHERE BillingCountry = Argentina
+ORDER BY Total DESC;
+```
+| InvoiceId | BillingCountry | Total | TotalPesos |
+| --------- | -------------- | ----- | ---------- |
+| 348       | Argentina      | 13.86 | 19154.52   |
+| 403       | Argentina      | 8.91  | 12313.62   |
+| 164       | Argentina      | 5.94  | 8209.08    |
+| 142       | Argentina      | 3.96  | 5472.72    |
+| 119       | Argentina      | 1.98  | 2736.36    |
+| 337       | Argentina      | 1.98  | 2736.36    |
+| 216       | Argentina      | 0.99  | 1368.18    |
+:::
