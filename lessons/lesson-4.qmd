@@ -1,0 +1,402 @@
+---
+title: "Grouping and Aggregation"
+format: html
+---
+
+## Finding Unique Values with `DISTINCT`
+In some instances, we may want to eliminate duplicates 
+from our query results. The `DISTINCT` keyword, which appears after `SELECT`, suppresses
+duplicates, so that each result appears at most once.
+
+Remember the `UnitPrice` field from the `Track` table? We already know that
+most songs have a price of $0.99, so that value appears over and over again 
+in this `SELECT` statement.
+
+```sql
+SELECT UnitPrice
+FROM Track
+LIMIT 5;
+```
+| UnitPrice |
+| --------- |
+| 0.99      |
+| 0.99      |
+| 0.99      |
+| 0.99      |
+| 0.99      |
+
+By using the `DISTINCT` keyword, we can see that the thousands of tracks have
+only two *distinct* prices: $.99 and $1.99.
+
+```sql
+SELECT DISTINCT UnitPrice
+FROM Track
+LIMIT 5;
+```
+| UnitPrice |
+| --------- |
+| 0.99      |
+| 1.99      |
+
+The `DISTINCT` keyword works on combinations of values (also known as tuples) as well.
+Let's say you're interested in the the city, state locations of your customers in
+Massachusetts and California. Remember, because we want rows where *either* condition
+is true, we need to use `OR` in the `WHERE` clause.
+
+```sql
+SELECT BillingCity, BillingState
+FROM Invoice
+WHERE (BillingState = 'MA') OR (BillingState = 'CA');
+LIMIT 5;
+```
+| BillingCity   | BillingState |
+| ------------- | ------------ |
+| Boston        | MA           |
+| Mountain View | CA           |
+| Cupertino     | CA           |
+| Cupertino     | CA           |
+| Boston        | MA           |
+
+Adding the `DISTINCT` keyword limits the results such that each combination
+of `BillingCity` and `BillingState` appears at most once.
+
+```sql
+SELECT BillingCity, BillingState
+FROM Invoice
+WHERE (BillingState = 'MA') OR (BillingState = 'CA');
+```
+| BillingCity   | BillingState |
+| ------------- | ------------ |
+| Boston        | MA           |
+| Mountain View | CA           |
+| Cupertino     | CA           |
+
+`SELECT DISTINCT` does *not* exclude NULL values if they appear in your result set.
+
+```sql
+SELECT DISTINCT Company
+FROM Customer;
+```
+| Company                                          |
+| ------------------------------------------------ |
+| Embraer - Empresa Brasileira de Aeronáutica S.A. |
+| null                                             |
+| JetBrains s.r.o.                                 |
+| Woodstock Discos                                 |
+| Banco do Brasil S.A.                             |
+| Riotur                                           |
+| Telus                                            |
+| Rogers Canada                                    |
+| Google Inc.                                      |
+| Microsoft Corporation                            |
+| Apple Inc.                                       |
+
+#### Quiz: Distinct Names that Begin With M
+Write a query to find the *unique* `FirstName` values in the
+`Customer` table that begin with the letter M, then order them
+in alphabetical order. 
+
+::: {.callout-tip collapse="true"}
+## Answer 
+To write this query, you will need to use a wildcard in the `WHERE`
+clause to filter to first names that begin with M and `DISTINCT` to filter out 
+names that appear more than once.
+
+```sql
+SELECT DISTINCT FirstName
+FROM Customer
+WHERE FirstName LIKE 'M%'
+ORDER BY FirstName;
+```
+| FirstName |
+| --------- |
+| Mark      |
+| Michelle  |
+| Martha    |
+| Madalena  |
+| Marc      |
+| Manoj     |
+:::
+
+The `DISTINCT` keyword can also be used inside aggregation functions in the `SELECT` clause.
+For example, if we want to identify the unique `CustomerId` values from California in the `Invoice`
+table we would use the following query.
+
+```sql
+SELECT DISTINCT CustomerId 
+FROM Invoice
+WHERE (BillingState = 'CA');
+```
+| CustomerId |
+| ---------- |
+| 16         |
+| 19         |
+| 20         |
+
+To count these values, wrap `DISTINCT CustomerId` in `COUNT()`.
+
+```sql
+SELECT COUNT(DISTINCT CustomerId)
+FROM Invoice
+WHERE (BillingState = 'CA');
+```
+| COUNT(DISTINCT CustomerId) |
+| -------------------------- |
+| 3                          |
+
+
+## Grouping By Value with `GROUP BY`
+In many cases, we don't just want to find the `SUM()` or `MAX()` of a field
+across *all* rows. Many datasets are most informative when
+we think about their measurements as aggregated within discrete
+groups. For example, we might want to analyze revenue by `BillingCountry` or
+the number of tracks by `Genre`. 
+
+Grouping gives us the power to independently apply functions to groups of
+rows within a table, with each group sharing a discrete value of a particular 
+(typically categorical) variable. No row can appear in more than one group!
+
+Take the `Company` field in the `Customer` table.
+
+```sql
+SELECT DISTINCT Company
+FROM Customer;
+```
+| Company                                          |
+| ------------------------------------------------ |
+| Embraer - Empresa Brasileira de Aeronáutica S.A. |
+| null                                             |
+| JetBrains s.r.o.                                 |
+| Woodstock Discos                                 |
+| Banco do Brasil S.A.                             |
+| Riotur                                           |
+| Telus                                            |
+| Rogers Canada                                    |
+| Google Inc.                                      |
+| Microsoft Corporation                            |
+| Apple Inc.                                       |
+
+There are eleven possible values (including `NULL`) for this column 
+in the `Customer` table. Let's say we want to know how
+many customers (rows) are affiliated with each company.
+
+We can use the `COUNT(*)` function in combination with `GROUP BY`
+to find this.
+
+```sql
+SELECT Company, COUNT(*)
+FROM Customer 
+GROUP BY Company;
+```
+| Company                                          | COUNT(*) |
+| ------------------------------------------------ | -------- |
+| null                                             | 49       |
+| Apple Inc.                                       | 1        |
+| Banco do Brasil S.A.                             | 1        |
+| Embraer - Empresa Brasileira de Aeronáutica S.A. | 1        |
+| Google Inc.                                      | 1        |
+| JetBrains s.r.o.                                 | 1        |
+| Microsoft Corporation                            | 1        |
+| Riotur                                           | 1        |
+| Rogers Canada                                    | 1        |
+| Telus                                            | 1        |
+| Woodstock Discos                                 | 1        |
+
+::: {.callout-important}
+If there are `NULL` values in the column used with `GROUP BY` 
+(and no `WHERE` clause is applied to filter them out) then a group
+will be created for the rows with `NULL` values.
+:::
+
+Remember our query to find the single biggest purchase in the `Invoice` table?
+We can refine that with `GROUP BY` and `SUM()` to find the five highest spending
+customers (and their total spending) across multiple invoices.
+
+Keep in mind that `GROUP BY` clauses grammatically come 
+after `FROM` and before `WHERE` and `ORDER BY`.
+
+```sql
+SELECT CustomerId, SUM(Total) as TotalSpending
+FROM Invoice 
+GROUP BY CustomerId
+ORDER BY TotalSpending DESC
+LIMIT 5;
+```
+| CustomerId | TotalSpending |
+| ---------- | ------------- |
+| 6          | 49.62         |
+| 26         | 47.62         |
+| 57         | 46.62         |
+| 45         | 45.62         |
+| 46         | 45.62         |
+
+#### Quiz: Basic Grouping
+Write a query that displays the `AlbumId` and number of tracks for each album in the `Track`
+table with an `AlbumId` less than 5. Use `NumTracks` as an alias for the number of tracks, and
+then order by `NumTracks` in ascending order.
+
+::: {.callout-tip collapse="true"}
+## Answer 
+The key to this query is to use `COUNT(*)` in conjunction with `GROUP BY` to count the
+number of tracks (rows) per album.
+
+```sql
+SELECT AlbumId, COUNT(*) as NumTracks
+FROM Track 
+WHERE AlbumId < 5
+GROUP BY AlbumId
+ORDER BY NumTracks; 
+```
+| AlbumId | NumTracks |
+| ------- | --------- |
+| 2       | 1         |
+| 3       | 3         |
+| 4       | 8         |
+| 1       | 10        |
+:::
+
+### Best Practices for `GROUP BY`
+Grouping is powerful and convenient, but there are some
+nuances to be aware of when using `GROUP BY`.
+
+* `GROUP BY` clauses have lower priority than `WHERE` clauses in terms of execution.
+This means rows are filtered before they are grouped. However, `GROUP BY` clauses
+grammatically follow `WHERE` when writing them out.
+* While it is not required from a syntactic perspective, it is
+best practice to list the field in the `GROUP BY` clause *first*
+in the `SELECT` clause.
+
+`GROUP BY` can be extended to multiple fields or attributes. If there are
+multiple grouped fields, rows with the same value for all columns in the `GROUP BY` clause 
+share a group.
+
+```sql
+SELECT BillingCity, BillingState, SUM(Total) as Revenue
+FROM Invoice
+WHERE (BillingState = 'CA') or (BillingState = 'MA')
+GROUP BY BillingCity, BillingState
+```
+| BillingCity   | BillingState | Revenue |
+| ------------- | ------------ | ------- |
+| Boston        | MA           | 37.62   |
+| Cupertino     | CA           | 38.62   |
+| Mountain View | CA           | 77.24   |
+
+If no aggregation function is specified for a column in a query with `GROUP BY`, the 
+query may return an arbitrary value that occurs within that column. It may default to 
+the first row within that group, but there is no guarantee about order.
+
+```sql
+SELECT GenreId, Name
+FROM Track 
+GROUP BY GenreId
+LIMIT 5;
+```
+| GenreId | Name                                    |
+| ------- | --------------------------------------- |
+| 1       | For Those About To Rock (We Salute You) |
+| 2       | Desafinado                              |
+| 3       | Enter Sandman                           |
+| 4       | Your Time Has Come                      |
+| 5       | Money                                   |
+
+In the example above, `Enter Sandman` *is* the `Name` of a `Track` with a `GenreId` of 5, but
+it's neither the first in alphabetical order, nor the last. 
+
+**The best way to avoid this ambiguity is to make sure that, when using `GROUP BY`, make sure
+every field in a `SELECT` clause is either aggregated or included in the `GROUP BY`.**
+
+#### Quiz: Debugging `GROUP BY`
+A colleague wants to total revenue and the number of customers associated with each `BillingCountry`
+in the `Invoice` table. They wrote the following query. However, you know for a fact that there 
+is only one `CustomerId` with a `BillingCountry` of `Argentina` in the table, so these results can't be right.
+How can this query be refined to give the number of `CustomerId` values associated with each
+`BillingCountry`?
+
+```sql
+SELECT BillingCountry, SUM(Total) as Revenue, COUNT(CustomerId) as NumCustomers
+FROM Invoice 
+GROUP BY BillingCountry;
+```
+*Hint*: What happens if the same customer has multiple rows in the `Invoice` table in this query?
+
+::: {.callout-tip collapse="true"}
+## Answer 
+Unlike the `Track` table, which has at most one row per track, it's possible for the `CustomerId`
+to be associated with many purchases in the `Invoice` table. This means, in order to count the number
+of *unique* customers, rather than the number of non-`NULL` values for the field, you must use
+`COUNT(DISTINCT CustomerID)` instead.
+```sql
+SELECT BillingCountry, SUM(Total) as Revenue, COUNT(DISTINCT CustomerId) as NumCustomers
+FROM Invoice 
+GROUP BY BillingCountry;
+```
+:::
+
+## The `HAVING` Clause
+Having fixed the query above, we can see that several `BillingCountry` values in the database are 
+associated with only one `CustomerId`. You decide to adjust this query to include only *groups*
+in which `COUNT(DISTINCT CustomerId) as NumCustomers` is > 1. However, this cannot be done with
+a `WHERE` clause. 
+
+Remember how the `WHERE` clause is always applied *before* `GROUP BY`? How do we filter our
+groups then? This is where the `HAVING` clause comes in. The `HAVING` clause can be used to filter
+aggregated data, because it is applied *after* `GROUP BY` but before `ORDER BY` and `LIMIT`.
+
+```sql
+SELECT BillingCountry, SUM(Total) as Revenue, COUNT(DISTINCT CustomerId) as NumCustomers
+FROM Invoice 
+GROUP BY BillingCountry
+HAVING NumCustomers > 1;
+```
+| BillingCountry | Revenue | NumCustomers |
+| -------------- | ------- | ------------ |
+| Brazil         | 190.1   | 5            |
+| Canada         | 303.96  | 8            |
+| Czech Republic | 90.24   | 2            |
+| France         | 195.1   | 5            |
+| Germany        | 156.48  | 4            |
+| India          | 75.26   | 2            |
+| Portugal       | 77.24   | 2            |
+| USA            | 523.06  | 13           |
+| United Kingdom | 112.86  | 3            |
+
+The `HAVING` clause can be used in conjunction with `WHERE`. The following
+query computes the price of each `AlbumId` composed by Miles Davis by summing
+the `UnitPrice` of each `Track` in the album using a `GROUP BY` clause. The
+`HAVING` clause then restricts the aggregated data to groups (`AlbumId` values)
+with an `AlbumPrice` greater than 10.
+
+```sql
+SELECT AlbumId, Composer, SUM(UnitPrice) as AlbumPrice
+FROM Track 
+WHERE Composer LIKE '%Miles Davis%'
+GROUP BY AlbumId, Composer 
+HAVING AlbumPrice > 10;
+```
+| AlbumId | Composer    | AlbumPrice |
+| ------- | ----------- | ---------- |
+| 48      | Miles Davis | 12.87      |
+
+Aggregated fields that do not appear in the `SELECT` clause may appear in the `HAVING` clause,
+but keep in mind that this filter for each *group*. 
+
+For example, this query lists the
+sum of the `Total` associated with each `BillingCountry` in `Invoice`, but it is filtered
+to groups with greater than 4 distinct `CustomerId` values.
+
+```sql
+SELECT BillingCountry, SUM(Total)
+FROM Invoice
+GROUP BY BillingCountry
+HAVING COUNT(DISTINCT CustomerId) > 4;
+```
+| BillingCountry | SUM(Total) |
+| -------------- | ---------- |
+| Brazil         | 190.1      |
+| Canada         | 303.96     |
+| France         | 195.1      |
+| USA            | 523.06     |
+
+When in doubt remember that the `HAVING` clause is for filtering groups and the
+`WHERE` clause is for filtering rows.

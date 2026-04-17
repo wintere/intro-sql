@@ -16,6 +16,8 @@ website:
         href: lessons/lesson-2.html
       - text: Intermediate Selection
         href: lessons/lesson-3.html
+      - text: Aggregation and Grouping
+        href: lessons/lesson-4.html
     - href: credits.qmd
       text: Credits
   page-footer:

@@ -239,8 +239,8 @@ FROM Track;
 `COUNT(*)` can also be used as shorthand to return the number
 of rows for which a `WHERE` clause is TRUE. 
 
-For example, this query returns *how many* customers have no associated `Company`,
-that is where `Company` is null.
+For example, this query returns *how many* customers have no associated `Company`, how many
+rows in which `Company` is null.
 ```sql
 SELECT COUNT(*)
 FROM Customer
