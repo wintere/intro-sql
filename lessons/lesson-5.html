@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction – UO Data Services: Introduction to SQL</title>
+<title>Database Structure and Joining Tables – UO Data Services: Introduction to SQL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Introduction</h1>
+<h1 class="title">Database Structure and Joining Tables</h1>
 </div>
 
 
@@ -201,241 +201,273 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="why-use-relational-databases" class="level2">
-<h2 class="anchored" data-anchor-id="why-use-relational-databases">Why Use Relational Databases?</h2>
-<p>Technically, any collection of structured information, whether a spreadsheet or set of files, can be considered a database. However, this class will focus on a specific family of databases: relational databases. <strong>Relational databases</strong> organize information into tables. They have been a fixture of businesses, non-profits, and educational institutions for decades.</p>
-<p>Databases grew out of a need for secure, robust, and concurrently accessible records. Databases allow administrators to restrict which users can read, write, or delete information on a table by table basis. For example, at an educational institution like the University of Oregon, it is important that students see their own information but not information pertaining to other students.</p>
-<p>We will not get into the details of <em>how</em> databases are managed in this workshop, but it is important to understand that SQL (as a query language) works independently of the implementation of the database. Despite advances in computing technology, many databases still retain the tabular structure popularized in the 80s and 90s.</p>
-</section>
-<section id="relational-databases-tables" class="level2">
-<h2 class="anchored" data-anchor-id="relational-databases-tables">Relational Databases: Tables</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../images/01-table-format.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="700"></p>
-</figure>
+<section id="a-refresher-the-seven-sql-clauses" class="level2">
+<h2 class="anchored" data-anchor-id="a-refresher-the-seven-sql-clauses">A Refresher: The Seven SQL Clauses</h2>
+<p>We have now learned the seven potential SQL clauses, and these make up the backbone of most SQL SELECT queries.</p>
+<ul>
+<li><code>SELECT</code> - filter, aggregate, and assign aliases to columns</li>
+<li><code>FROM</code> - selects which tables to read from</li>
+<li><code>WHERE</code> - filter input rows based on conditions</li>
+<li><code>GROUP BY</code> - aggregate rows by their values in a column or columns</li>
+<li><code>HAVING</code> - filter grouped rows</li>
+<li><code>ORDER BY</code> - sort output</li>
+<li><code>LIMIT</code> - restrict output to the first n rows</li>
+</ul>
+<p>Keeping track of all the potential clauses can be intimidating, so it’s best to start with the simple parts of you query and add complexity. For example, always start with the <code>FROM</code> clause, to make sure you’re reading from the correct table(s), before filtering to your desired rows with <code>WHERE</code>. Don’t worry about <code>HAVING</code> until you’re confident with the groups formed with <code>GROUP BY</code>.</p>
+<section id="quiz-putting-it-all-together" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-putting-it-all-together">Quiz: Putting It All Together</h4>
+<p>Write a query that counts the number of invoices(rows) in each <code>BillingState</code>, <code>BillingCountry</code> group in the <code>Invoice</code> table, filtered to rows where <code>BillingState</code> is not null, with groups filtered to groups with at least 5 rows, ordered by <code>BillingState</code> in ascending alphabetical order, and restricted to the first five results. Use the alias <code>Invoices</code> for the number of rows per group.</p>
+<p>This is a complex query, so start from the following template with hints!</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingState, BillingCountry, <span class="co">--- AS ----</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="co">--- IS NOT NULL</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingState, BillingCountry</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="co">---</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> BillingState </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>A relational database stores information in <strong>tables</strong> or <strong>entities</strong>. Each table has a set of columns and a variable number of records.</p>
-<section id="attributes" class="level3">
-<h3 class="anchored" data-anchor-id="attributes">Attributes</h3>
-<ul>
-<li>Each <strong>attribute</strong> (also known as a field or column) has an associated data type. You will encounter the following SQL data types in this workshop:
-<ul>
-<li><strong>integer</strong>: a signed whole number</li>
-<li><strong>numeric</strong>: used for storing decimals or floats</li>
-<li><strong>varchar(n)</strong>/<strong>nvarchar(n)</strong>: a string (text) of at most n characters, including spaces</li>
-<li><strong>char(n)</strong>: a string (text) of exactly n characters, including spaces</li>
-<li><strong>datetime</strong>: a date and time string in the form <code>'YYYY-MM-DD 00:00:00'</code></li>
-</ul></li>
-<li>Every value within that column <em>must</em> be of the specified data type, or (when-permitted) <code>NULL</code>.</li>
-</ul>
-</section>
-<section id="records" class="level3">
-<h3 class="anchored" data-anchor-id="records">Records</h3>
-<ul>
-<li>Every <strong>record</strong> or <strong>row</strong> has the same number of attributes.</li>
-<li>There is no limit on the number of records in a table. However, for performance reasons, SQL tables should be no larger than they need to be to store required information.</li>
-</ul>
-</section>
-</section>
-<section id="introducing-the-workshop-database" class="level2">
-<h2 class="anchored" data-anchor-id="introducing-the-workshop-database">Introducing the Workshop Database</h2>
-<p>Before using SQL to query the data, let’s inspect the structure and contents of our music store database.</p>
-<section id="table-and-field-names" class="level3">
-<h3 class="anchored" data-anchor-id="table-and-field-names">Table and Field Names</h3>
-<section id="album" class="level4">
-<h4 class="anchored" data-anchor-id="album">Album</h4>
-<ul>
-<li>A table of musical albums</li>
-<li><code>AlbumId</code> - integer</li>
-<li><code>Title</code> - nvarchar(160)</li>
-<li><code>ArtistId</code> - integer</li>
-</ul>
-</section>
-<section id="artist" class="level4">
-<h4 class="anchored" data-anchor-id="artist">Artist</h4>
-<ul>
-<li>A table of artist and band names</li>
-<li><code>ArtistId</code> - integer</li>
-<li><code>Name</code> - nvarchar(120)</li>
-</ul>
-</section>
-<section id="customer" class="level4">
-<h4 class="anchored" data-anchor-id="customer">Customer</h4>
-<ul>
-<li>A table of customer name and address information</li>
-<li><code>CustomerId</code> - integer</li>
-<li><code>FirstName</code> - nvarchar</li>
-<li><code>LastName</code> - nvarchar</li>
-<li><code>Company</code> - nvarchar</li>
-<li><code>Address</code> - nvarchar</li>
-<li><code>City</code> - nvarchar</li>
-<li><code>State</code> - nvarchar</li>
-<li><code>Country</code> - nvarchar</li>
-<li><code>PostalCode</code> - nvarchar</li>
-</ul>
-</section>
-<section id="genre" class="level4">
-<h4 class="anchored" data-anchor-id="genre">Genre</h4>
-<ul>
-<li>A table of musical genres</li>
-<li><code>GenreId</code> - integer</li>
-<li><code>Name</code> - nvarchar(120)</li>
-</ul>
-</section>
-<section id="invoice" class="level4">
-<h4 class="anchored" data-anchor-id="invoice">Invoice</h4>
-<ul>
-<li>A table of invoices, with customer ids and itemized totals</li>
-<li><code>InvoiceId</code> - integer</li>
-<li><code>CustomerId</code> - integer</li>
-<li><code>InvoiceDate</code> - datetime</li>
-<li><code>BillingAddress</code> - nvarchar(70)</li>
-<li><code>BillingCity</code> - nvarchar(40)</li>
-<li><code>BillingState</code> - nvarchar(40)</li>
-<li><code>BillingCountry</code> - nvarchar(40)</li>
-<li><code>BillingPostalCode</code> - nvarchar(10)</li>
-<li><code>Total</code> - numeric</li>
-</ul>
-</section>
-<section id="invoiceline" class="level4">
-<h4 class="anchored" data-anchor-id="invoiceline">InvoiceLine</h4>
-<ul>
-<li>A table of invoice components, outlining individual purchases</li>
-<li><code>InvoiceLineId</code> - integer</li>
-<li><code>InvoiceId</code> - integer</li>
-<li><code>TrackId</code> - integer</li>
-<li><code>UnitPrice</code> - numeric</li>
-<li><code>Quantity</code> - integer</li>
-</ul>
-</section>
-<section id="track" class="level4">
-<h4 class="anchored" data-anchor-id="track">Track</h4>
-<ul>
-<li>A table of track metadata</li>
-<li><code>TrackId</code> - integer</li>
-<li><code>Name</code> - nvarchar</li>
-<li><code>AlbumId</code> - integer</li>
-<li><code>GenreId</code>- integer</li>
-<li><code>Composer</code> - nvarchar</li>
-<li><code>Milliseconds</code> - integer</li>
-<li><code>Bytes</code> - integer</li>
-<li><code>UnitPrice</code> - numeric</li>
-</ul>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You will need to use <code>COUNT(*)</code> or the <code>Invoices</code> alias in the <code>HAVING</code> clause get your desired results here!</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingState, BillingCountry, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">as</span> Invoices</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> BillingState <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingState, BillingCountry</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="op">&gt;</span> <span class="dv">5</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> BillingState</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>BillingState</th>
+<th>BillingCountry</th>
+<th>Invoices</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AB</td>
+<td>Canada</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>AZ</td>
+<td>USA</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>BC</td>
+<td>Canada</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>CA</td>
+<td>USA</td>
+<td>21</td>
+</tr>
+<tr class="odd">
+<td>DF</td>
+<td>Brazil</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </section>
 </section>
-<section id="first-peek-schema-diagrams" class="level3">
-<h3 class="anchored" data-anchor-id="first-peek-schema-diagrams">First Peek: Schema Diagrams</h3>
-<p>Schema diagrams are used to represent relationships between tables in a database.</p>
+<section id="primary-keys" class="level2">
+<h2 class="anchored" data-anchor-id="primary-keys">Primary Keys</h2>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="../images/02-schema-diagram.png" class="img-fluid figure-img" width="800"></p>
 <figcaption>A schema diagram for the example music database</figcaption>
 </figure>
 </div>
-<p>The structure of this database will be explained in more detail as more SQL concepts are introduced. Remote attendees will receive a digital copy of this schema diagram, while in-person attendees will receive a handout. Think of this schema diagram as a roadmap to your database!</p>
-</section>
-</section>
-<section id="exploring-the-database-in-beekeeper-studio" class="level2">
-<h2 class="anchored" data-anchor-id="exploring-the-database-in-beekeeper-studio">Exploring the Database in Beekeeper Studio</h2>
-<section id="the-beekeeper-studio-interface" class="level3">
-<h3 class="anchored" data-anchor-id="the-beekeeper-studio-interface">The Beekeeper Studio Interface</h3>
+<p>Remember this diagram? It’s time to decode it.</p>
+<ul>
+<li>Each table is one box.</li>
+<li>Underneath the name of each table is a list of every column in that table, followed by that field’s data type.</li>
+<li>The first field, indicated in bold, is special. This bolded field is called a primary key.</li>
+</ul>
+<p>A <strong>primary key</strong> is a field (or sets of fields) that uniquely identifies rows within a table. Every primary key must be not null, and no two rows can have the same primary key. You will see real-world databases with primary keys that are made up of combinations of fields, and the same principles apply to each unique set of values. Primary keys often take the form <code>[tablename]Id</code>.</p>
+<p>You can also evaluate which field functions as the primary key from within the Beekeeper Studio interface. In the interface pane on the left side of the screen, right-click on the name of a table and click <strong>View Structure</strong>.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="../images/02-basic-interface.png" class="img-fluid figure-img" width="400"></p>
-<figcaption>The Beekeeper Studio interface</figcaption>
+<p><img src="../images/05-beekeeper-view-structure.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>The View Structure screen for the Album table</figcaption>
 </figure>
 </div>
-<p>On the left side of Beekeeper Studio, there is a navigation pane with three icons.</p>
-<ul>
-<li>The first, a database symbol, allows you to inspect the structure and properties of the current database.</li>
-<li>The second allows you to see your saved queries. We’ll talk about saving queries shortly.</li>
-<li>Finally, the third allows you to see all the queries you’ve run in the current workspace, including ones you may not have saved.</li>
-</ul>
+<p>A new tab in the Beekeeper Studio interface will open displaying information about each column in the table. The <code>Primary</code> checkbox indicates whether or not the field is a primary key. The <code>Nullable</code> checkbox indicates whether or not a field can take on a nul value. The <code>Type</code> column lists the data type of each field.</p>
+<section id="quiz-primary-keys" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-primary-keys">Quiz: Primary Keys</h4>
+<p>Which of the following is the primary key of the Album table?</p>
+<div id="radio_CCJVWWSKMO" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value="answer"> <span>AlbumId</span></label><label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value=""> <span>Title</span></label><label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value=""> <span>ArtistId</span></label>
+</div>
+<p>Database designers decide which fields in a table can be null, their data types, and their default values based on the properties of the data stored in the database. These constraints have important ramifications for how the database interacts with software and the validity of its records. As a database user, it is important for you to understand what the constraints of your database are, even if you don’t have the authority to change them.</p>
+</section>
+<section id="quiz-nullables" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-nullables">Quiz: Nullables</h4>
+<p>Which of the following fields in the <code>Invoice</code> table can be null? Ask yourself why.</p>
+<div id="radio_DJUTJVBFRB" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>InvoiceId</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>CustomerId</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>Total</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value="answer"> <span>BillingState</span></label>
+</div>
 </section>
 </section>
-<section id="select-from-and-limit" class="level2">
-<h2 class="anchored" data-anchor-id="select-from-and-limit">SELECT, FROM, and LIMIT</h2>
-<p>For our first query, let’s list the first and last names of each customer known to have purchased music from the store. To do this, we need the keywords <strong>SELECT</strong> and <strong>FROM</strong>.</p>
-<p>Click the <strong>+</strong> button in the Beekeeper Studio editor pane to open a new query console and type the following.</p>
+<section id="foreign-keys" class="level2">
+<h2 class="anchored" data-anchor-id="foreign-keys">Foreign Keys</h2>
+<p>It’s time to tackle the final, undiscussed element of the schema diagram: the connections between tales. Each line in the schema diagram represents a foreign key relationship.</p>
+<p>A foreign key is a field (or set of fields) in one table whose values are a primary key in another table. That means that every (non-null) foreign key value must have a corresponding row in another table.</p>
+<p>Take the <code>Album</code> table. The <code>Album</code> table has <code>AlbumId</code> for its primary key, but the <code>ArtistId</code> field is a foreign key linked to the <code>Artist</code> table. That means that if we see an <code>ArtistId</code> of <code>6</code> in <code>Album</code>, we can be confident that the row in <code>Artist</code> with <code>ArtistId=6</code> corresponds to the same entity.</p>
+<p>As viewing schema diagrams is a premium feature of Beekeeper Studio, I have provided a diagram as generated in another program for you. Luckily, you can view secondary key relationships in the <strong>View Structure -&gt; Relations</strong> tab of Beekeeper Studio.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="../images/02-query-interface.png" class="img-fluid figure-img" width="700"></p>
-<figcaption>A first query in the Beekepeer Studio console</figcaption>
+<p><img src="../images/05-foreign-key.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>The View Structure/Relations screen for the Invoice table</figcaption>
 </figure>
 </div>
-<section id="unpacking-a-first-sql-query" class="level3">
-<h3 class="anchored" data-anchor-id="unpacking-a-first-sql-query">Unpacking a First SQL Query</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> FirstName, LastName </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In the screenshot above, the <code>Invoice</code> table lists <code>CustomerId</code> as being a <em>FK</em> or foreign key, tied to the <code>Customer</code> tabler. This means that all <code>CustomerId</code> values in <code>Invoice</code> must correspond to exactly one row in <code>Customer</code>.</p>
+<p>There are 4 types of relationships between database tables:</p>
 <ul>
-<li><code>FROM</code> is the most important part of the query. It must be followed by the name of a table in the database.</li>
-<li><code>SELECT</code> is followed by comma-separated names of fields within that table.</li>
-<li>Every SQL query ends with a semicolon <code>;</code>.</li>
+<li>One to One - each item in the first table has exactly one match in the second table.</li>
+<li>One to Many - each item in the first table is related to many items in the second table, sometimes represented as 1 to * or 1 to ∞</li>
+<li>Many to One - many items in the first table is related to one item in the second table.</li>
+<li>Many to Many - many items in the first table are related to many items in the second table.</li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Schema diagrams will often use special symbology to indicate these relationships to the users of a database. I selected the Chinook database because the distinction between 1:1 to 1:* relationships is fairly intuitive.</p>
+<p>For example, it’s only natural that a <code>CustomerId</code> can be linked to multiple purchases in <code>Invoice</code>.</p>
+<section id="quiz-foreign-keys" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-foreign-keys">Quiz: Foreign Keys</h4>
+<p>Use Beekeeper Studio to view the structure and contents of the <code>InvoiceLine</code> and <code>Invoice</code> tables. Which of the following statements about these tables is true?</p>
+<div id="radio_BPLDETNPPW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value=""> <span>InvoiceLineId is a foreign key in the Invoice table that refers to the InvoiceLine table.</span></label><label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value="answer"> <span>InvoiceId is a foreign key in the InvoiceLine table that refers to the Invoice table.</span></label><label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value=""> <span>The InvoiceId and InvoiceLineId fields have a 1:1 relationship.</span></label>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+</section>
+<section id="why-not-just-use-one-big-table" class="level3">
+<h3 class="anchored" data-anchor-id="why-not-just-use-one-big-table">Why Not Just Use One Big Table?</h3>
+<p>When you look at songs on a music store or on a streaming platform, you <em>see</em> the information related to each song as one big table. The album, artist, and track information is included on every row, even if much of that information is repeated. For example, we know that every track on <code>AlbumId=3</code> will have the same album title, but that title is displayed over and over to the user.</p>
+<p>Databases are structured to reduce redundancy through a design process called normalization. Normalization makes databases more resilient to human error. I chose the Chinook database because it already demonstrates good database design principles. It is broken down into several tables to make sure that each “fact” (relationship between fields) stated as few times as possible.</p>
+<p>We can reconstruct larger tables through a process called joining. Good database tables are easy to join with each other, provided we take advantage of their foreign key relationships.</p>
+</section>
+</section>
+<section id="a-gentle-introduction-to-join" class="level2">
+<h2 class="anchored" data-anchor-id="a-gentle-introduction-to-join">A Gentle Introduction to <code>JOIN</code></h2>
+<p>Joining tables in SQL can get messy and complicated. We will focus on simple joins based on best practice that produce consistent, meaningful results.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/05-cross-product.png" class="img-fluid figure-img" width="400"></p>
+<figcaption>A visual explanation of the cross product</figcaption>
+</figure>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>SQL is case-insensitive, but it’s best practice to capitalize keywords like <code>SELECT</code> and <code>FROM</code>. It makes it easier to distinguish between keywords and values, which are typically camel case or title case.</p>
-</div>
-</div>
-<p>To change the order of columns in our ourput, we can rewrite the order as follows:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>As a shortcut, we can select all of the columns in a table using <code>*</code>:</p>
+<p>All <code>JOIN</code> operations represented a subset of the cross-product (or Cartesian product) (though they aren’t <em>implemented</em> this way) between two tables. The cross-product of tables A and B is the sum of all possible combinations of rows in A and B, which creates a table of size (rows in A * rows in B).</p>
+<p>This query computes the cross-product of <code>Customer</code> and <code>Invoice</code> using the <code>JOIN</code> keyword.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The <code>*</code> symbol tells SQL to display all of the fields in the table from left to right.</p>
-</section>
-<section id="controlling-output-with-limit" class="level3">
-<h3 class="anchored" data-anchor-id="controlling-output-with-limit">Controlling Output with <code>LIMIT</code></h3>
-<p>The <code>Customer</code> table has 59 rows, which is more than we want to read at once. Luckily, SQL has keyword that limits the number of rows returned.</p>
-<p>At the end of any SQL command, just before the semicolon, use the keyword <code>LIMIT</code> followed by a number of rows to indicate how many rows we want to return.</p>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">JOIN</span> Invoice;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li><code>LIMIT</code> must be followed by a positive integer.</li>
+<li>The <code>Customer</code> table has 59 rows and 12 columns.</li>
+<li>The <code>Invoice</code> table has 412 rows and 9 columns.</li>
+<li>The result of this query has 59 * 412 = 24308 rows and 12 + 9 = 21 columns.</li>
+<li>Observe that columns with the same name are repeated in the results.</li>
 </ul>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> LastName, FirstName</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This query <em>could</em> tell us something useful. From the structure of the database, we know that every purchase in <code>Invoice</code> has an associated <code>CustomerId</code>. Joining the two tables could give us the purchase history of each customer, linking name and location information to purchases.</p>
+<p>The problem is that only rows where the <code>CustomerId</code> is shared between two tables provide meaningful information. That is, there isn’t a meaningful link between an invoice with <code>CustomerId=3</code> and the first and last name of <code>CustomerId=5</code>.</p>
+<p><code>JOIN</code> is followed by the keyword <code>ON</code>, which allows joins based on conditional relationships between two tables. All <code>JOIN</code> operations you will learn going forward will have an <code>ON</code> condition.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>The output of this query has 412 columns and 21 rows.</li>
+<li>This makes sense if we think carefully. Each of the 412 rows in <code>Invoice</code> has a non-null <code>CustomerId</code>, and therefore (as a foreign key) a matching a <code>CustomerId</code> in the <code>Customer</code> table.</li>
+</ul>
+<p>Notice that we used Table.field to specify field names in the output of the join. This is because tables can have fields with the same name.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/05-inner-join.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>A visual explanation of an inner join</figcaption>
+</figure>
+</div>
+<p>The <code>JOIN</code> we just performed is called an <code>INNER JOIN</code>. In the future, I will use the keyword <code>INNER JOIN</code> to refer to these joins to distinguish them from <code>LEFT</code> and <code>FULL OUTER</code> JOINS.</p>
+<p>We can now filter our joined input using <code>SELECT</code> and <code>WHERE</code> clauses. The following query gives the <code>FirstName</code>, <code>LastName</code>, <code>InvoiceDate</code>, and <code>Total</code> of each customer and their associated purchases, provided the customer has the string <code>John</code> somewhere in their name.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> FirstName, LastName, InvoiceDate, Total</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> FirstName <span class="kw">LIKE</span> <span class="st">'%John%'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>LastName</th>
 <th>FirstName</th>
+<th>LastName</th>
+<th>InvoiceDate</th>
+<th>Total</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Gonçalves</td>
-<td>Luís</td>
+<td>John</td>
+<td>Gordon</td>
+<td>2021-01-11 00:00:00</td>
+<td>13.86</td>
 </tr>
 <tr class="even">
-<td>Köhler</td>
-<td>Leonie</td>
+<td>John</td>
+<td>Gordon</td>
+<td>2021-09-11 00:00:00</td>
+<td>8.91</td>
 </tr>
 <tr class="odd">
-<td>Tremblay</td>
-<td>François</td>
+<td>John</td>
+<td>Gordon</td>
+<td>2023-04-18 00:00:00</td>
+<td>1.98</td>
 </tr>
 <tr class="even">
-<td>Hansen</td>
-<td>Bjørn</td>
+<td>John</td>
+<td>Gordon</td>
+<td>2023-07-21 00:00:00</td>
+<td>3.96</td>
 </tr>
 <tr class="odd">
-<td>Wichterlová</td>
-<td>František</td>
+<td>John</td>
+<td>Gordon</td>
+<td>2023-10-23 00:00:00</td>
+<td>5.94</td>
+</tr>
+<tr class="even">
+<td>John</td>
+<td>Gordon</td>
+<td>2024-06-12 00:00:00</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>John</td>
+<td>Gordon</td>
+<td>2025-12-04 00:00:00</td>
+<td>1.98</td>
 </tr>
 </tbody>
 </table>
-<section id="quiz-try-it-yourself" class="level4">
-<h4 class="anchored" data-anchor-id="quiz-try-it-yourself">Quiz: Try it Yourself</h4>
-<p>What SQL query will you give the email address of the first five customers in the Customer table?</p>
+<section id="quiz-a-first-join-practice" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-a-first-join-practice">Quiz: A First JOIN Practice</h4>
+<p>Let’s say you want to find the <code>AlbumId</code>, <code>Title</code>, and (Artist) <code>Name</code> of every album in the <code>Album</code> table with the word <code>'Greatest'</code> in its title. This will require you join the <code>Album</code> table to the <code>Artist</code> table. I have provided boilerplate to get you started.</p>
+<ul>
+<li>Use <code>ArtistName</code> as an alias for <code>Name</code> for clarity.</li>
+<li>Order by <code>Title</code> in ascending order.</li>
+<li>Don’t forget to express your join fields in <code>table.field</code> form.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">JOIN</span> Artist <span class="kw">ON</span> <span class="co">--- = -----</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Title <span class="kw">LIKE</span> <span class="co">---</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="co">---'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -448,39 +480,111 @@ Note
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Email</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> AlbumId, Title, Name <span class="kw">as</span> ArtistName</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">JOIN</span> Artist <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Title <span class="kw">LIKE</span> <span class="st">'%Greatest%'</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Title;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Email</th>
+<th>AlbumId</th>
+<th>Title</th>
+<th>ArtistName</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>luisg@embraer.com.br</td>
+<td>141</td>
+<td>Greatest Hits</td>
+<td>Lenny Kravitz</td>
 </tr>
 <tr class="even">
-<td>leonekohler@surfeu.de</td>
+<td>185</td>
+<td>Greatest Hits I</td>
+<td>Queen</td>
 </tr>
 <tr class="odd">
-<td>ftremblay@gmail.com</td>
+<td>36</td>
+<td>Greatest Hits II</td>
+<td>Queen</td>
 </tr>
 <tr class="even">
-<td>bjorn.hansen@yahoo.no</td>
+<td>37</td>
+<td>Greatest Kiss</td>
+<td>Kiss</td>
 </tr>
 <tr class="odd">
-<td>frantisekw@jetbrains.com</td>
+<td>162</td>
+<td>Motley Crue Greatest Hits</td>
+<td>Mötley Crüe</td>
+</tr>
+<tr class="even">
+<td>202</td>
+<td>Rotten Apples: Greatest Hits</td>
+<td>Smashing Pumpkins</td>
+</tr>
+<tr class="odd">
+<td>215</td>
+<td>The Police Greatest Hits</td>
+<td>The Police</td>
+</tr>
+<tr class="even">
+<td>67</td>
+<td>Vault: Def Leppard’s Greatest Hits</td>
+<td>Def Leppard</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-
-
 </section>
+<section id="joins-gone-wrong" class="level3">
+<h3 class="anchored" data-anchor-id="joins-gone-wrong">Joins Gone Wrong</h3>
+<p>Just because two fields in two database tables share the same name and have the same meaning, doesn’t mean they are good candidates for joins. Foreign key relationships make for good joins because you can make guarantees about the shape and cardinality (the number of rows) in your results because primary keys correspond to at most one row in their respective tables.</p>
+<p>What happens if we do an arbirtary many-to-many join? Let’s take <code>UnitPrice</code> as it appears in <code>Track</code> and <code>UnitPrice</code> as it appears in <code>InvoiceLine</code>. These both correspond to the price of a song or television episode from the <code>Track</code> table.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.UnitPrice <span class="op">=</span> InvoiceLine.UnitPrice</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>UnitPrice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“40”</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>“40”</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>“40”</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>“40”</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>“40”</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table>
+<p>This query produces an enormous output, and almost all of it is meaningless. Because many rows in <code>Track</code> have the same <code>UnitPrice</code> (0.99) and many rows in <code>InvoiceLine</code> have the same <code>UnitPrice</code> (0.99), it produces a table of size 7028053 rows.</p>
+<p>A more useful query will take advantage of the foreign key relationship between the Track and InvoiceLine tables, joining on <code>TrackId</code> instead. The following query gives us, alphabetized by track name, each <code>InvoiceId</code> on which a <code>Track</code> was purchased.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice, InvoiceId</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+
 </section>
 </section>
 
