@@ -314,14 +314,14 @@ The pattern `'%And%'` matches both `Andy` and `Cat and Dog`.
 Which of the following patterns would match the string `'Sandwich'` if used
 with `LIKE` in a `WHERE` clause?
 ```{r, echo=FALSE}
-opts_p <- c(
+opts_r <- c(
    "Sa%witch",
    answer = "Sandwi__",
    "'_Sandwich'"
 )
 ```
 
-`r longmcq(opts_p)`
+`r longmcq(opts_r)`
 
 #### Caveat: Escape Characters
 SQL strings are always wrapped in single-quotes. This is unfortunate when we want to 

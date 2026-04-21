@@ -16,5 +16,5 @@ No experience with SQL required, though participants may benefit from familiarit
 * April 9, 2026, 1pm—2pm: Selection Fundamentals
 * April 14, 2026, 1pm—2pm: Intermediate Selection
 * April 16, 2026, 1pm—2pm: Aggregation and Grouping
-* April 21, 2026, 1pm—2pm: TBA
-* April 23, 2026, 1pm—2pm: TBA
+* April 21, 2026, 1pm—2pm: Database Structure and Joining Tables
+* April 23, 2026, 1pm—2pm: Using Joins

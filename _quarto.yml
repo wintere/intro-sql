@@ -18,6 +18,8 @@ website:
         href: lessons/lesson-3.html
       - text: Aggregation and Grouping
         href: lessons/lesson-4.html
+      - text: Database Structure and Joining Tables
+        href: lessons/lesson-5.html
     - href: credits.qmd
       text: Credits
   page-footer:
