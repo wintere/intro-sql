@@ -20,6 +20,10 @@ website:
         href: lessons/lesson-4.html
       - text: Database Structure and Joining Tables
         href: lessons/lesson-5.html
+      - text: Using Joins
+        href: lessons/lesson-6.html
+    - href: resources.md
+      text: SQL Resources
     - href: credits.qmd
       text: Credits
   page-footer:
