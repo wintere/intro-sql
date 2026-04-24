@@ -161,8 +161,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../lessons/lesson-5.html">
  <span class="dropdown-text">Database Structure and Joining Tables</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-6.html">
+ <span class="dropdown-text">Using Joins</span></a>
+  </li>  
     </ul>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../resources.html"> 
+<span class="menu-text">SQL Resources</span></a>
+  </li>  
   <li class="nav-item">
     <a class="nav-link" href="../credits.html"> 
 <span class="menu-text">Credits</span></a>
@@ -312,16 +320,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quiz-primary-keys" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-primary-keys">Quiz: Primary Keys</h4>
 <p>Which of the following is the primary key of the Album table?</p>
-<div id="radio_CCJVWWSKMO" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value="answer"> <span>AlbumId</span></label><label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value=""> <span>Title</span></label><label><input type="radio" autocomplete="off" name="radio_CCJVWWSKMO" value=""> <span>ArtistId</span></label>
+<div id="radio_UYIUQOCOSK" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_UYIUQOCOSK" value="answer"> <span>AlbumId</span></label><label><input type="radio" autocomplete="off" name="radio_UYIUQOCOSK" value=""> <span>Title</span></label><label><input type="radio" autocomplete="off" name="radio_UYIUQOCOSK" value=""> <span>ArtistId</span></label>
 </div>
 <p>Database designers decide which fields in a table can be null, their data types, and their default values based on the properties of the data stored in the database. These constraints have important ramifications for how the database interacts with software and the validity of its records. As a database user, it is important for you to understand what the constraints of your database are, even if you don’t have the authority to change them.</p>
 </section>
 <section id="quiz-nullables" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-nullables">Quiz: Nullables</h4>
 <p>Which of the following fields in the <code>Invoice</code> table can be null? Ask yourself why.</p>
-<div id="radio_DJUTJVBFRB" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>InvoiceId</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>CustomerId</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value=""> <span>Total</span></label><label><input type="radio" autocomplete="off" name="radio_DJUTJVBFRB" value="answer"> <span>BillingState</span></label>
+<div id="radio_TCOWTAVKRS" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_TCOWTAVKRS" value=""> <span>InvoiceId</span></label><label><input type="radio" autocomplete="off" name="radio_TCOWTAVKRS" value=""> <span>CustomerId</span></label><label><input type="radio" autocomplete="off" name="radio_TCOWTAVKRS" value=""> <span>Total</span></label><label><input type="radio" autocomplete="off" name="radio_TCOWTAVKRS" value="answer"> <span>BillingState</span></label>
 </div>
 </section>
 </section>
@@ -350,8 +358,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quiz-foreign-keys" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-foreign-keys">Quiz: Foreign Keys</h4>
 <p>Use Beekeeper Studio to view the structure and contents of the <code>InvoiceLine</code> and <code>Invoice</code> tables. Which of the following statements about these tables is true?</p>
-<div id="radio_BPLDETNPPW" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value=""> <span>InvoiceLineId is a foreign key in the Invoice table that refers to the InvoiceLine table.</span></label><label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value="answer"> <span>InvoiceId is a foreign key in the InvoiceLine table that refers to the Invoice table.</span></label><label><input type="radio" autocomplete="off" name="radio_BPLDETNPPW" value=""> <span>The InvoiceId and InvoiceLineId fields have a 1:1 relationship.</span></label>
+<div id="radio_VDQMWBZJTW" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_VDQMWBZJTW" value=""> <span>InvoiceLineId is a foreign key in the Invoice table that refers to the InvoiceLine table.</span></label><label><input type="radio" autocomplete="off" name="radio_VDQMWBZJTW" value="answer"> <span>InvoiceId is a foreign key in the InvoiceLine table that refers to the Invoice table.</span></label><label><input type="radio" autocomplete="off" name="radio_VDQMWBZJTW" value=""> <span>The InvoiceId and InvoiceLineId fields have a 1:1 relationship.</span></label>
 </div>
 </section>
 <section id="why-not-just-use-one-big-table" class="level3">
@@ -538,51 +546,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-<section id="joins-gone-wrong" class="level3">
-<h3 class="anchored" data-anchor-id="joins-gone-wrong">Joins Gone Wrong</h3>
-<p>Just because two fields in two database tables share the same name and have the same meaning, doesn’t mean they are good candidates for joins. Foreign key relationships make for good joins because you can make guarantees about the shape and cardinality (the number of rows) in your results because primary keys correspond to at most one row in their respective tables.</p>
-<p>What happens if we do an arbirtary many-to-many join? Let’s take <code>UnitPrice</code> as it appears in <code>Track</code> and <code>UnitPrice</code> as it appears in <code>InvoiceLine</code>. These both correspond to the price of a song or television episode from the <code>Track</code> table.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.UnitPrice <span class="op">=</span> InvoiceLine.UnitPrice</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>UnitPrice</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>“40”</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>“40”</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>“40”</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>“40”</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>“40”</td>
-<td>0.99</td>
-</tr>
-</tbody>
-</table>
-<p>This query produces an enormous output, and almost all of it is meaningless. Because many rows in <code>Track</code> have the same <code>UnitPrice</code> (0.99) and many rows in <code>InvoiceLine</code> have the same <code>UnitPrice</code> (0.99), it produces a table of size 7028053 rows.</p>
-<p>A more useful query will take advantage of the foreign key relationship between the Track and InvoiceLine tables, joining on <code>TrackId</code> instead. The following query gives us, alphabetized by track name, each <code>InvoiceId</code> on which a <code>Track</code> was purchased.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice, InvoiceId</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>

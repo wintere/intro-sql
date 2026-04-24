@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.17">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Using Joins – UO Data Services: Introduction to SQL</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c2d8198b7f72dec16de60f0cb3fab69f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-25d36f370f74572310f8908c5fb308fd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../include/webex.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">UO Data Services: Introduction to SQL</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-lessons" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Lessons</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-lessons">    
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-1.html">
+ <span class="dropdown-text">Introduction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-2.html">
+ <span class="dropdown-text">Selection Fundamentals</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-3.html">
+ <span class="dropdown-text">Intermediate Selection</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-4.html">
+ <span class="dropdown-text">Aggregation and Grouping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-5.html">
+ <span class="dropdown-text">Database Structure and Joining Tables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../lessons/lesson-6.html">
+ <span class="dropdown-text">Using Joins</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../resources.html"> 
+<span class="menu-text">SQL Resources</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../credits.html"> 
+<span class="menu-text">Credits</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Using Joins</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="using-other-sql-clauses-with-inner-join" class="level2">
+<h2 class="anchored" data-anchor-id="using-other-sql-clauses-with-inner-join">Using Other SQL Clauses with INNER JOIN</h2>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/05-inner-join.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>A visual explanation of an inner join</figcaption>
+</figure>
+</div>
+<p>In our last lesson, you were introduced to the <code>JOIN</code> or <code>INNER JOIN</code> operation, which, given a match between columns expressed in <code>TABLE1.col1</code>, <code>TABLE2.col2</code> form, allows you to create a new result with a row corresponding to each pair of matching rows between the two tables.</p>
+<p>Joins are typically peformed between fields that are linked by a primary key/foreign key relationship. This allows us to ask complex questions about the same objects, people, or records by aggregating or concatenating information distributed across multiple tables.</p>
+<p>When using <code>SELECT *</code> with joined tables, you will see every column in both tables, even when columns are repeated.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Null values are not considered equal to each other, so an <code>INNER JOIN</code> will <strong>not</strong> return rows where both A and B of <code>ON A = B</code> are null.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 23%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 46%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>GenreId</th>
+<th>Name</th>
+<th>TrackId</th>
+<th>AlbumId</th>
+<th>Composer</th>
+<th>Milliseconds</th>
+<th>Bytes</th>
+<th>UnitPrice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>For Those About To Rock (We Salute You)</td>
+<td>1</td>
+<td>1</td>
+<td>Angus Young, Malcolm Young, Brian Johnson</td>
+<td>343719</td>
+<td>11170334</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Balls to the Wall</td>
+<td>2</td>
+<td>2</td>
+<td>U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann</td>
+<td>342562</td>
+<td>5510424</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Fast As a Shark</td>
+<td>3</td>
+<td>3</td>
+<td>F. Baltes, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
+<td>230619</td>
+<td>3990994</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Restless and Wild</td>
+<td>4</td>
+<td>3</td>
+<td>F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
+<td>252051</td>
+<td>4331779</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Princess of the Dawn</td>
+<td>5</td>
+<td>3</td>
+<td>Deaffy &amp; R.A. Smith-Diesel</td>
+<td>375418</td>
+<td>6290521</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table>
+<p>You can use <code>SELECT</code> followed by column names to restrict the results to specific columns, just as you would any other query.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> TrackId, UnitPrice</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>UnitPrice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table>
+<p>However, if your joined tables have a column of the same name, you will be prompted to use <code>table.col_name</code> format in the <code>SELECT</code> clause.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>ambiguous column: Name</code></pre>
+<p>In the example above, both <code>Genre</code> and <code>Track</code> have <code>Name</code> fields, but <code>Name</code> in the <code>Genre</code> table represents a genre, while <code>Name</code> in <code>Track</code> is the name of a song.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, Genre.Name</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+<p>Using <code>table.field</code> notation makes the intent of the query clear to the SQL engine, but these results are no longer clearly to a human interpreter of the data: there are two different fields called <code>Name</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">as</span> Track, Genre.Name <span class="kw">as</span> Genre</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Track</th>
+<th>Genre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+<p>Using <code>AS</code> aliases make the query results more human-readable. Use aliases liberally when performing joins and other complicated SQL queries.</p>
+<p>When performing <code>INNER JOIN</code> operations, the number of rows in the result will be the same regardless of whether you join A to B or B to A, provided you use the same joining condition. This makes sense, given what we know about inner joins. If <code>A=B</code>, then <code>B=A</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">AS</span> Title, Genre.Name <span class="kw">AS</span> Genre</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> Genre</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Title</th>
+<th>Genre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+<section id="group-by-and-joins" class="level3">
+<h3 class="anchored" data-anchor-id="group-by-and-joins"><code>GROUP BY</code> and Joins</h3>
+<p>We can use <code>GROUP BY</code> and <code>HAVING</code> clauses with joined tables. Just like with <code>SELECT</code>, using <code>table.field</code> form is the <code>GROUP BY</code> cluase is sometimes necessary to avoid ambiguity.</p>
+<p>The following query computes the five most popular genres of <code>Track</code> in the database by joining the <code>Genre</code> and <code>Track</code> tables and counting the number of tracks <em>per</em> genre with <code>COUNT</code>. Then, these groups are sorted by the number of tracks per genre or <code>NumTracks</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Genre.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackId) <span class="kw">as</span> NumTracks</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Genre.Name</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumTracks <span class="kw">DESC</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>NumTracks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rock</td>
+<td>1297</td>
+</tr>
+<tr class="even">
+<td>Latin</td>
+<td>579</td>
+</tr>
+<tr class="odd">
+<td>Metal</td>
+<td>374</td>
+</tr>
+<tr class="even">
+<td>Alternative &amp; Punk</td>
+<td>332</td>
+</tr>
+<tr class="odd">
+<td>Jazz</td>
+<td>130</td>
+</tr>
+</tbody>
+</table>
+<p>Observe that <code>Genre.Name</code> is used in the <code>GROUP BY</code> clause rather than <code>Name</code> because both <code>Genre</code> and <code>Track</code> have a field named <code>Name</code>.</p>
+<section id="quiz-join-and-group-by" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-join-and-group-by">Quiz: JOIN and GROUP BY</h4>
+<p>Write a query that finds the CustomerId, FirstName and LastName of the 3 customers who spent the most money (sum of <code>Total</code>) by joining the <code>Invoice</code> and <code>Customer</code> tables on <code>CustomerId</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="co">-----</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- ON ------ = ---------</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="co">------ ------</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="fu">SUM</span>(Total)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">SUM</span>(Total) <span class="kw">DESC</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CustomerId</th>
+<th>FirstName</th>
+<th>LastName</th>
+<th>SUM(Total)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6</td>
+<td>Helena</td>
+<td>Holý</td>
+<td>49.62</td>
+</tr>
+<tr class="even">
+<td>26</td>
+<td>Richard</td>
+<td>Cunningham</td>
+<td>47.62</td>
+</tr>
+<tr class="odd">
+<td>57</td>
+<td>Luis</td>
+<td>Rojas</td>
+<td>46.62</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="joins-gone-wrong-joining-against-arbitrary-fields" class="level3">
+<h3 class="anchored" data-anchor-id="joins-gone-wrong-joining-against-arbitrary-fields">Joins Gone Wrong: Joining Against Arbitrary Fields</h3>
+<p>Just because two fields in two database tables share the same name doesn’t mean they are good candidates for joins. Foreign key relationships make for good joins because you can make guarantees about the shape and cardinality (the number of rows) in your results. Remember, primary keys correspond to at most one row in their respective tables.</p>
+<p>What happens if we do an arbirtary many-to-many join? Let’s take <code>UnitPrice</code> as it appears in <code>Track</code> and <code>UnitPrice</code> as it appears in <code>InvoiceLine</code>. These both correspond to the price of a song or television episode from the <code>Track</code> table.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.UnitPrice <span class="op">=</span> InvoiceLine.UnitPrice</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This query produces an enormous result! Because many rows in <code>Track</code> have the same <code>UnitPrice</code> (0.99) and many rows in <code>InvoiceLine</code> have the same <code>UnitPrice</code> (0.99), it produces a table of size 7028053 rows.</p>
+</section>
+</section>
+<section id="other-joins-full-outer-join-and-left-join" class="level2">
+<h2 class="anchored" data-anchor-id="other-joins-full-outer-join-and-left-join">Other Joins: <code>FULL OUTER JOIN</code> and <code>LEFT JOIN</code></h2>
+<p>As stated above, <code>INNER JOIN</code> operations ignore tuples that have null values in the column used to join tables in <em>either</em> of the tables being joined. This isn’t always desirable, especially when the <em>absence</em> of a certain foreign key in a table is meaningful.</p>
+<p><img src="../images/05-outer-join.png" class="img-fluid quarto-figure quarto-figure-left" width="800" alt="A visual explanation of an outer join"> The <code>FULL OUTER JOIN</code> operation includes input tuples “padded” with <code>NULL</code> values if either side of the join has unmatched tuples. This means every row in each of the tables in a <code>FULL OUTER JOIN</code> is included at least once in the output.</p>
+<p>Let’s take the <code>InvoiceLine</code> and <code>TrackId</code> tables for example to see this difference. Each <code>InvoiceLine</code> has a non-null <code>TrackId</code>, but not every <code>Track</code> in the <code>Track</code> table has been purchased. How do we know?</p>
+<p>This <code>INNER JOIN</code> has 2240 results, even though the <code>Track</code> table has 3503 rows. This is because any tracks that have one or more corresponding rows in the <code>InvoiceLine</code> do not appear in the results.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If it was important that <em>every</em> track (and every invoice line) be included in the results, then we could use a FULL OUTER JOIN instead, which returns 3759 rows. This is because some tracks have been purchased twice, while others have never been purchased.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We can then apply grouping to this join to learn more about the distribution of track purchases.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>NumPurchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>…</p>
+<p>By restricting this query to groups (invoice lines grouped by track) with no known purchases with the having clause, we can see that 1519 tracks in the database have never been purchased.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>NumPurchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>22</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>…</p>
+<section id="quiz-full-outer-join-vs.-inner-join" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-full-outer-join-vs.-inner-join">Quiz: FULL OUTER JOIN vs.&nbsp;INNER JOIN</h4>
+<p>If we switch the FULL OUTER JOIN to an INNER JOIN in the query above, what will happen to our results.</p>
+<div id="radio_ECKVGXLWCI" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_ECKVGXLWCI" value="answer"> <span>There will be no results, as there will be groups of rows corresponding to <code>TrackIds</code> with no <code>InvoiceLine</code> matches.</span></label><label><input type="radio" autocomplete="off" name="radio_ECKVGXLWCI" value=""> <span>There will be fewer results, as each TrackId has at most one InvoiceLine.</span></label><label><input type="radio" autocomplete="off" name="radio_ECKVGXLWCI" value=""> <span>There will be more results, because the INNER JOIN includes more rows from the Track table.</span></label>
+</div>
+</section>
+<section id="left-join-briefly-explained" class="level3">
+<h3 class="anchored" data-anchor-id="left-join-briefly-explained"><code>LEFT JOIN</code> Briefly Explained</h3>
+<p>The order in which you state <code>A INNER JOIN B</code> or <code>A FULL OUTER JOIN B</code> doesn’t matter, but that changes with the <code>LEFT JOIN</code> operation. The <code>LEFT JOIN</code> operation considers the first table the “left” side of the join and the second the “right” side.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/05-left-join.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>A visual explanation of an left join</figcaption>
+</figure>
+</div>
+<p>The <code>LEFT JOIN</code> operation includes input tuples “padded” with <code>NULL</code> values on the “right” if any tuples on the left have no matches. This means every row in the table of the left side of a <code>LEFT JOIN</code> is included at least once in the output.</p>
+<p>We can adjust our query above using a <code>LEFT JOIN</code> operator to find the purchase count for the first five tracks in the database in alphabetical order.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, Track.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId, Track.Name</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 75%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>Name</th>
+<th>NumPurchases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3027</td>
+<td>“40”</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>2918</td>
+<td>“?”</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>3412</td>
+<td>“Eine Kleine Nachtmusik” Serenade In G, K. 525: I. Allegro</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>109</td>
+<td>#1 Zero</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>3254</td>
+<td>#9 Dream</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="a-note-on-join-types" class="level3">
+<h3 class="anchored" data-anchor-id="a-note-on-join-types">A Note On Join Types</h3>
+<p>If every non-null value of <code>A.key</code> is present in <code>B</code> and vice-versa, then an <code>INNER JOIN</code> is equivalent to <code>FULL OUTER JOIN</code> and <code>LEFT JOIN</code>. Observe how the two queries below have the same number of results.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is a <code>RIGHT JOIN</code> counterpart to <code>LEFT JOIN</code>, but it’s rarely used because <code>RIGHT JOIN</code> operations can always expressed as <code>LEFT JOIN</code> operations with the order of the tables inverted. In fact, early versions of SQLite didn’t even <em>have</em> a RIGHT JOIN keyword.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="joining-three-or-more-tables" class="level2">
+<h2 class="anchored" data-anchor-id="joining-three-or-more-tables">Joining Three or More Tables</h2>
+<p>You can join three or more tables in the same <code>FROM</code> clause, but you need to be careful to specify what you are joining on for each <code>JOIN</code>.</p>
+<p>The following query joins three tables, <code>Customer</code>, <code>Invoice</code>, and <code>InvoiceLine</code>, groups the resulting joined rows by <code>CustomerId</code>, then aggregates to find the number of purchases and the most recent purchase of each customer.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CustomerId</th>
+<th>NumPurchases</th>
+<th>MostRecentPurchase</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>58</td>
+<td>38</td>
+<td>2025-12-22 00:00:00</td>
+</tr>
+<tr class="even">
+<td>44</td>
+<td>38</td>
+<td>2025-12-14 00:00:00</td>
+</tr>
+<tr class="odd">
+<td>35</td>
+<td>38</td>
+<td>2025-12-09 00:00:00</td>
+</tr>
+<tr class="even">
+<td>29</td>
+<td>38</td>
+<td>2025-12-06 00:00:00</td>
+</tr>
+<tr class="odd">
+<td>25</td>
+<td>38</td>
+<td>2025-12-05 00:00:00</td>
+</tr>
+</tbody>
+</table>
+<section id="quiz-big-joins" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-big-joins">Quiz: Big Joins</h4>
+<p>Some albums have many different composer credits! Find the ten albums in the database (and the musical artists responsible for them) with the greatest number of <em>distinct</em> composer attributions by joining the <code>Artist</code>, <code>Album</code> and <code>Track</code> tables. Remember, all the composer information varies on a Track by Track basis. <code>INNER JOIN</code> operations are appropriate here.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> <span class="co">-------) as NumComposerCredits</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- on ------ = -------</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="co">-------</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> Composer) <span class="kw">as</span> NumComposerCredits</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">on</span> Track.AlbumId <span class="op">=</span> Album.AlbumId</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Album.AlbumId</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 51%">
+<col style="width: 17%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>AlbumId</th>
+<th>Title</th>
+<th>Name</th>
+<th>NumComposerCredits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>141</td>
+<td>Greatest Hits</td>
+<td>Lenny Kravitz</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>83</td>
+<td>My Way: The Best Of Frank Sinatra [Disc 1]</td>
+<td>Frank Sinatra</td>
+<td>21</td>
+</tr>
+<tr class="odd">
+<td>248</td>
+<td>Ao Vivo [IMPORT]</td>
+<td>Zeca Pagodinho</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td>115</td>
+<td>Sex Machine</td>
+<td>James Brown</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>33</td>
+<td>Chill: Brazil (Disc 1)</td>
+<td>Marcos Valle</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="saving-complex-queries-as-views" class="level2">
+<h2 class="anchored" data-anchor-id="saving-complex-queries-as-views">Saving Complex Queries as Views</h2>
+<p>You’re now writing complex queries that would take you time to rewrite. Joining three or more tables can be painstaking, and it’s not uncommon to run the same report on a regular basis.</p>
+<p>A <code>VIEW</code> is a (virtual) table that is populated every time you query it. Any SQL query can be made into a <code>VIEW</code>, but the feature is typically used for complex queries or analyses.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> BigPurchases <span class="kw">AS</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, Invoice.BillingCountry, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackID) <span class="kw">as</span> NumPurchases,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceLineId</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, Invoice.BillingCountry</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="../images/06-beekeeper-view.png" class="img-fluid figure-img" width="800"></p>
+<figcaption>An example view</figcaption>
+</figure>
+</div>
+<p>Click on the left Entities to see your new view in Beekeeper Studio. This view is saved to your database, so it is available to you each time you open Beekeeper Studio.</p>
+<p>To remove a view, right-click the view and click <strong>Drop</strong>.</p>
+<section id="closing-note" class="level4">
+<h4 class="anchored" data-anchor-id="closing-note">Closing Note</h4>
+<p>Thank you so much for participating in this workshop series! If you would like to learn more, I would encourage you to continue your SQL journey by looking through our recommended <a href="../resources.html">additional resources</a>.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+
+/* update total correct if #webex-total_correct exists */
+update_total_correct = function() {
+  console.log("webex: update total_correct");
+
+  var t = document.getElementsByClassName("webex-total_correct");
+  for (var i = 0; i < t.length; i++) {
+    p = t[i].parentElement;
+    var correct = p.getElementsByClassName("webex-correct").length;
+    var solvemes = p.getElementsByClassName("webex-solveme").length;
+    var radiogroups = p.getElementsByClassName("webex-radiogroup").length;
+    var selects = p.getElementsByClassName("webex-select").length;
+
+    t[i].innerHTML = correct + " of " + (solvemes + radiogroups + selects) + " correct";
+  }
+}
+
+/* webex-solution button toggling function */
+b_func = function() {
+  console.log("webex: toggle hide");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('open')) {
+    cl.remove("open");
+  } else {
+    cl.add("open");
+  }
+}
+
+/* check answers */
+check_func = function() {
+  console.log("webex: check answers");
+
+  var cl = this.parentElement.classList;
+  if (cl.contains('unchecked')) {
+    cl.remove("unchecked");
+    this.innerHTML = "Hide Answers";
+  } else {
+    cl.add("unchecked");
+    this.innerHTML = "Show Answers";
+  }
+}
+
+/* function for checking solveme answers */
+solveme_func = function(e) {
+  console.log("webex: check solveme");
+
+  var real_answers = JSON.parse(this.dataset.answer);
+  var my_answer = this.value;
+  var cl = this.classList;
+  if (cl.contains("ignorecase")) {
+    my_answer = my_answer.toLowerCase();
+  }
+  if (cl.contains("nospaces")) {
+    my_answer = my_answer.replace(/ /g, "")
+  }
+
+  if (my_answer == "") {
+    cl.remove("webex-correct");
+    cl.remove("webex-incorrect");
+  } else if (real_answers.includes(my_answer)) {
+    cl.add("webex-correct");
+    cl.remove("webex-incorrect");
+  } else {
+    cl.add("webex-incorrect");
+    cl.remove("webex-correct");
+  }
+
+  // match numeric answers within a specified tolerance
+  if(this.dataset.tol > 0){
+    var tol = JSON.parse(this.dataset.tol);
+    var matches = real_answers.map(x => Math.abs(x - my_answer) < tol)
+    if (matches.reduce((a, b) => a + b, 0) > 0) {
+      cl.add("webex-correct");
+    } else {
+      cl.remove("webex-correct");
+    }
+  }
+
+  // added regex bit
+  if (cl.contains("regex")){
+    answer_regex = RegExp(real_answers.join("|"))
+    if (answer_regex.test(my_answer)) {
+      cl.add("webex-correct");
+    }
+  }
+
+  update_total_correct();
+}
+
+/* function for checking select answers */
+select_func = function(e) {
+  console.log("webex: check select");
+
+  var cl = this.classList
+
+  /* add style */
+  cl.remove("webex-incorrect");
+  cl.remove("webex-correct");
+  if (this.value == "answer") {
+    cl.add("webex-correct");
+  } else if (this.value != "blank") {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+/* function for checking radiogroups answers */
+radiogroups_func = function(e) {
+  console.log("webex: check radiogroups");
+
+  var checked_button = document.querySelector('input[name=' + this.id + ']:checked');
+  var cl = checked_button.parentElement.classList;
+  var labels = checked_button.parentElement.parentElement.children;
+
+  /* get rid of styles */
+  for (i = 0; i < labels.length; i++) {
+    labels[i].classList.remove("webex-incorrect");
+    labels[i].classList.remove("webex-correct");
+  }
+
+  /* add style */
+  if (checked_button.value == "answer") {
+    cl.add("webex-correct");
+  } else {
+    cl.add("webex-incorrect");
+  }
+
+  update_total_correct();
+}
+
+window.onload = function() {
+  console.log("webex onload");
+  /* set up solution buttons */
+  var buttons = document.getElementsByTagName("button");
+
+  for (var i = 0; i < buttons.length; i++) {
+    if (buttons[i].parentElement.classList.contains('webex-solution')) {
+      buttons[i].onclick = b_func;
+    }
+  }
+
+  var check_sections = document.getElementsByClassName("webex-check");
+  console.log("check:", check_sections.length);
+  for (var i = 0; i < check_sections.length; i++) {
+    check_sections[i].classList.add("unchecked");
+
+    let btn = document.createElement("button");
+    btn.innerHTML = "Show Answers";
+    btn.classList.add("webex-check-button");
+    btn.onclick = check_func;
+    check_sections[i].appendChild(btn);
+
+    let spn = document.createElement("span");
+    spn.classList.add("webex-total_correct");
+    check_sections[i].appendChild(spn);
+  }
+
+  /* set up webex-solveme inputs */
+  var solveme = document.getElementsByClassName("webex-solveme");
+
+  for (var i = 0; i < solveme.length; i++) {
+    /* make sure input boxes don't auto-anything */
+    solveme[i].setAttribute("autocomplete","off");
+    solveme[i].setAttribute("autocorrect", "off");
+    solveme[i].setAttribute("autocapitalize", "off");
+    solveme[i].setAttribute("spellcheck", "false");
+    solveme[i].value = "";
+
+    /* adjust answer for ignorecase or nospaces */
+    var cl = solveme[i].classList;
+    var real_answer = solveme[i].dataset.answer;
+    if (cl.contains("ignorecase")) {
+      real_answer = real_answer.toLowerCase();
+    }
+    if (cl.contains("nospaces")) {
+      real_answer = real_answer.replace(/ /g, "");
+    }
+    solveme[i].dataset.answer = real_answer;
+
+    /* attach checking function */
+    solveme[i].onkeyup = solveme_func;
+    solveme[i].onchange = solveme_func;
+
+    solveme[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  /* set up radiogroups */
+  var radiogroups = document.getElementsByClassName("webex-radiogroup");
+  for (var i = 0; i < radiogroups.length; i++) {
+    radiogroups[i].onchange = radiogroups_func;
+  }
+
+  /* set up selects */
+  var selects = document.getElementsByClassName("webex-select");
+  for (var i = 0; i < selects.length; i++) {
+    selects[i].onchange = select_func;
+    selects[i].insertAdjacentHTML("afterend", " <span class='webex-icon'></span>")
+  }
+
+  update_total_correct();
+}
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/wintere\.github\.io\/intro-sql\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/wintere/intro-sql">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p><a href="https://library.uoregon.edu/data-services">UO Data Services</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
