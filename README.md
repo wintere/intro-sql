@@ -11,9 +11,9 @@ No experience with SQL required, though participants may benefit from familiarit
 
 ## Sessions
 
-* April 7, 2026, 1pm—2pm: Setup, Introduction
-* April 9, 2026, 1pm—2pm: Selection Fundamentals
-* April 14, 2026, 1pm—2pm: Intermediate Selection
-* April 16, 2026, 1pm—2pm: Aggregation and Grouping
-* April 21, 2026, 1pm—2pm: Database Structure and Joining Tables
-* April 23, 2026, 1pm—2pm: Using Joins
+* November 3, 2026, 12pm—1pm: Setup, Introduction
+* November 5, 2026, 12pm—1pm: Selection Fundamentals
+* November 10, 2026, 12pm—1pm: Intermediate Selection
+* November 12, 2026, 12pm—1pm: Aggregation and Grouping
+* November 17, 2026, 12pm—1pm: Database Structure and Joining Tables
+* November 19, 2026, 12pm—1pm: Using Joins
