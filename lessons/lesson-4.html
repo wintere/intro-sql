@@ -260,9 +260,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 <p>The <code>DISTINCT</code> keyword works on combinations of values (also known as tuples) as well. Let’s say you’re interested in the the city, state locations of your customers in Massachusetts and California. Remember, because we want rows where <em>either</em> condition is true, we need to use <code>OR</code> in the <code>WHERE</code> clause.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCity, BillingState</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> BillingCity, BillingState</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> (BillingState <span class="op">=</span> <span class="st">'MA'</span>) <span class="kw">OR</span> (BillingState <span class="op">=</span> <span class="st">'CA'</span>);</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> (BillingState <span class="op">=</span> <span class="st">'MA'</span>) <span class="kw">OR</span> (BillingState <span class="op">=</span> <span class="st">'CA'</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
@@ -577,7 +577,6 @@ Important
 </div>
 </div>
 <p>Remember our query to find the single biggest purchase in the <code>Invoice</code> table? We can refine that with <code>GROUP BY</code> and <code>SUM()</code> to find the five highest spending customers (and their total spending) across multiple invoices.</p>
-<p>Keep in mind that <code>GROUP BY</code> clauses grammatically come after <code>FROM</code> and before <code>WHERE</code> and <code>ORDER BY</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> CustomerId, <span class="fu">SUM</span>(Total) <span class="kw">as</span> TotalSpending</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> CustomerId</span>
@@ -613,6 +612,13 @@ Important
 </tr>
 </tbody>
 </table>
+<section id="best-practices-for-group-by" class="level3">
+<h3 class="anchored" data-anchor-id="best-practices-for-group-by">Best Practices for <code>GROUP BY</code></h3>
+<p>Grouping is powerful and convenient, but there are some nuances to be aware of when using <code>GROUP BY</code>.</p>
+<ul>
+<li><code>GROUP BY</code> clauses have lower priority than <code>WHERE</code> clauses in terms of execution. This means rows are filtered before they are grouped. However, <code>GROUP BY</code> clauses grammatically follow <code>WHERE</code> when writing them out.</li>
+<li>While it is not required from a syntactic perspective, it is best practice to list the field in the <code>GROUP BY</code> clause <em>first</em> in the <code>SELECT</code> clause.</li>
+</ul>
 <section id="quiz-basic-grouping" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-basic-grouping">Quiz: Basic Grouping</h4>
 <p>Write a query that displays the <code>AlbumId</code> and number of tracks for each album in the <code>Track</code> table with an <code>AlbumId</code> less than 5. Use <code>NumTracks</code> as an alias for the number of tracks, and then order by <code>NumTracks</code> in ascending order.</p>
@@ -664,13 +670,9 @@ Important
 </div>
 </div>
 </section>
-<section id="best-practices-for-group-by" class="level3">
-<h3 class="anchored" data-anchor-id="best-practices-for-group-by">Best Practices for <code>GROUP BY</code></h3>
-<p>Grouping is powerful and convenient, but there are some nuances to be aware of when using <code>GROUP BY</code>.</p>
-<ul>
-<li><code>GROUP BY</code> clauses have lower priority than <code>WHERE</code> clauses in terms of execution. This means rows are filtered before they are grouped. However, <code>GROUP BY</code> clauses grammatically follow <code>WHERE</code> when writing them out.</li>
-<li>While it is not required from a syntactic perspective, it is best practice to list the field in the <code>GROUP BY</code> clause <em>first</em> in the <code>SELECT</code> clause.</li>
-</ul>
+</section>
+<section id="grouping-multiple-columns" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-multiple-columns">Grouping Multiple Columns</h3>
 <p><code>GROUP BY</code> can be extended to multiple fields or attributes. If there are multiple grouped fields, rows with the same value for all columns in the <code>GROUP BY</code> clause share a group.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCity, BillingState, <span class="fu">SUM</span>(Total) <span class="kw">as</span> Revenue</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
@@ -741,7 +743,7 @@ Important
 <p><strong>The best way to avoid this ambiguity is to make sure that, when using <code>GROUP BY</code>, make sure every field in a <code>SELECT</code> clause is either aggregated or included in the <code>GROUP BY</code>.</strong></p>
 <section id="quiz-debugging-group-by" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-debugging-group-by">Quiz: Debugging <code>GROUP BY</code></h4>
-<p>A colleague wants to total revenue and the number of customers associated with each <code>BillingCountry</code> in the <code>Invoice</code> table. They wrote the following query. However, you know for a fact that there is only one <code>CustomerId</code> with a <code>BillingCountry</code> of <code>Argentina</code> in the table, so these results can’t be right. How can this query be refined to give the number of <code>CustomerId</code> values associated with each <code>BillingCountry</code>?</p>
+<p>A colleague wants to total revenue and the number of unique customers associated with each <code>BillingCountry</code> in the <code>Invoice</code> table. They wrote the following query. However, you know for a fact that there is only one <code>CustomerId</code> with a <code>BillingCountry</code> of <code>Argentina</code> in the table, so these results can’t be right. How can this query be refined to give the number of <code>CustomerId</code> values associated with each <code>BillingCountry</code>?</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCountry, <span class="fu">SUM</span>(Total) <span class="kw">as</span> Revenue, <span class="fu">COUNT</span>(CustomerId) <span class="kw">as</span> NumCustomers</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingCountry;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -832,12 +834,17 @@ Important
 </tr>
 </tbody>
 </table>
-<p>The <code>HAVING</code> clause can be used in conjunction with <code>WHERE</code>. The following query computes the price of each <code>AlbumId</code> composed by Miles Davis by summing the <code>UnitPrice</code> of each <code>Track</code> in the album using a <code>GROUP BY</code> clause. The <code>HAVING</code> clause then restricts the aggregated data to groups (<code>AlbumId</code> values) with an <code>AlbumPrice</code> greater than 10.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> AlbumId, Composer, <span class="fu">SUM</span>(UnitPrice) <span class="kw">as</span> AlbumPrice</span>
+<p>Using <code>HAVING</code> without in a query without <code>GROUP BY</code> generates a syntax error.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> AlbumId, TrackId</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Composer <span class="kw">LIKE</span> <span class="st">'%Miles Davis%'</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> AlbumId, Composer </span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> AlbumPrice <span class="op">&gt;</span> <span class="dv">10</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(TrackId) <span class="op">&gt;</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>HAVING clause on a non-aggregate query</code></pre>
+<p>The <code>HAVING</code> clause can be used in conjunction with <code>WHERE</code>. The following query computes the price of each <code>AlbumId</code> composed by Miles Davis by summing the <code>UnitPrice</code> of each <code>Track</code> in the album using a <code>GROUP BY</code> clause. The <code>HAVING</code> clause then restricts the aggregated data to groups (<code>AlbumId</code> values) with an <code>AlbumPrice</code> greater than 10.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> AlbumId, Composer, <span class="fu">SUM</span>(UnitPrice) <span class="kw">as</span> AlbumPrice</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Composer <span class="kw">LIKE</span> <span class="st">'%Miles Davis%'</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> AlbumId, Composer </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> AlbumPrice <span class="op">&gt;</span> <span class="dv">10</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -856,10 +863,10 @@ Important
 </table>
 <p>Aggregated fields that do not appear in the <code>SELECT</code> clause may appear in the <code>HAVING</code> clause, but keep in mind that this filter for each <em>group</em>.</p>
 <p>For example, this query lists the sum of the <code>Total</code> associated with each <code>BillingCountry</code> in <code>Invoice</code>, but it is filtered to groups with greater than 4 distinct <code>CustomerId</code> values.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCountry, <span class="fu">SUM</span>(Total)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingCountry</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> CustomerId) <span class="op">&gt;</span> <span class="dv">4</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCountry, <span class="fu">SUM</span>(Total)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingCountry</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> CustomerId) <span class="op">&gt;</span> <span class="dv">4</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -886,9 +893,58 @@ Important
 </tr>
 </tbody>
 </table>
-<p>When in doubt remember that the <code>HAVING</code> clause is for filtering groups and the <code>WHERE</code> clause is for filtering rows.</p>
+<section id="complex-having-clauses" class="level3">
+<h3 class="anchored" data-anchor-id="complex-having-clauses">Complex <code>HAVING</code> Clauses</h3>
+<p>The <code>HAVING</code> clause supports the same logical operations as the <code>WHERE</code> clause. For example, the query below computes the revenue and number of unique customers per <code>BillingCountry</code> in <code>Invoice</code>, then filters those grouped results to countries where <code>Revenue &gt; 100</code> and <code>NumCustomers &gt; 1</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> BillingCountry, <span class="fu">SUM</span>(Total) <span class="kw">as</span> Revenue, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> CustomerId) <span class="kw">as</span> NumCustomers</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> BillingCountry </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> (Revenue <span class="op">&gt;</span> <span class="dv">100</span>) <span class="kw">AND</span> (NumCustomers <span class="op">&gt;</span> <span class="dv">1</span>); </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>BillingCountry</th>
+<th>Revenue</th>
+<th>NumCustomers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Brazil</td>
+<td>190.1</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Canada</td>
+<td>303.96</td>
+<td>8</td>
+</tr>
+<tr class="odd">
+<td>France</td>
+<td>195.1</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>Germany</td>
+<td>156.48</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>USA</td>
+<td>523.06</td>
+<td>13</td>
+</tr>
+<tr class="even">
+<td>United Kingdom</td>
+<td>112.86</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>When in doubt, remember that the <code>HAVING</code> clause is for filtering groups and the <code>WHERE</code> clause is for filtering rows.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
