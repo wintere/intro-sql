@@ -320,16 +320,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quiz-primary-keys" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-primary-keys">Quiz: Primary Keys</h4>
 <p>Which of the following is the primary key of the Album table?</p>
-<div id="radio_RZDOYJKGYT" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_RZDOYJKGYT" value="answer"> <span>AlbumId</span></label><label><input type="radio" autocomplete="off" name="radio_RZDOYJKGYT" value=""> <span>Title</span></label><label><input type="radio" autocomplete="off" name="radio_RZDOYJKGYT" value=""> <span>ArtistId</span></label>
+<div id="radio_NHVHIFUKWM" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_NHVHIFUKWM" value="answer"> <span>AlbumId</span></label><label><input type="radio" autocomplete="off" name="radio_NHVHIFUKWM" value=""> <span>Title</span></label><label><input type="radio" autocomplete="off" name="radio_NHVHIFUKWM" value=""> <span>ArtistId</span></label>
 </div>
 <p>Database designers decide which fields in a table can be null, their data types, and their default values based on the properties of the data stored in the database. These constraints have important ramifications for how the database interacts with software and the validity of its records. As a database user, it is important for you to understand what the constraints of your database are, even if you don’t have the authority to change them.</p>
 </section>
 <section id="quiz-nullables" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-nullables">Quiz: Nullables</h4>
 <p>Which of the following fields in the <code>Invoice</code> table can be null? Ask yourself why.</p>
-<div id="radio_YSFWCRAGDN" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_YSFWCRAGDN" value=""> <span>InvoiceId</span></label><label><input type="radio" autocomplete="off" name="radio_YSFWCRAGDN" value=""> <span>CustomerId</span></label><label><input type="radio" autocomplete="off" name="radio_YSFWCRAGDN" value=""> <span>Total</span></label><label><input type="radio" autocomplete="off" name="radio_YSFWCRAGDN" value="answer"> <span>BillingState</span></label>
+<div id="radio_GYXGOVPCCX" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_GYXGOVPCCX" value=""> <span>InvoiceId</span></label><label><input type="radio" autocomplete="off" name="radio_GYXGOVPCCX" value=""> <span>CustomerId</span></label><label><input type="radio" autocomplete="off" name="radio_GYXGOVPCCX" value=""> <span>Total</span></label><label><input type="radio" autocomplete="off" name="radio_GYXGOVPCCX" value="answer"> <span>BillingState</span></label>
 </div>
 </section>
 </section>
@@ -358,8 +358,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="quiz-foreign-keys" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-foreign-keys">Quiz: Foreign Keys</h4>
 <p>Use Beekeeper Studio to view the structure and contents of the <code>InvoiceLine</code> and <code>Invoice</code> tables. Which of the following statements about these tables is true?</p>
-<div id="radio_NDAWSEXRTP" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_NDAWSEXRTP" value=""> <span>InvoiceLineId is a foreign key in the Invoice table that refers to the InvoiceLine table.</span></label><label><input type="radio" autocomplete="off" name="radio_NDAWSEXRTP" value="answer"> <span>InvoiceId is a foreign key in the InvoiceLine table that refers to the Invoice table.</span></label><label><input type="radio" autocomplete="off" name="radio_NDAWSEXRTP" value=""> <span>The InvoiceId and InvoiceLineId fields have a 1:1 relationship.</span></label>
+<div id="radio_BJVETYZMDA" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_BJVETYZMDA" value=""> <span>InvoiceLineId is a foreign key in the Invoice table that refers to the InvoiceLine table.</span></label><label><input type="radio" autocomplete="off" name="radio_BJVETYZMDA" value="answer"> <span>InvoiceId is a foreign key in the InvoiceLine table that refers to the Invoice table.</span></label><label><input type="radio" autocomplete="off" name="radio_BJVETYZMDA" value=""> <span>The InvoiceId and InvoiceLineId fields have a 1:1 relationship.</span></label>
 </div>
 </section>
 <section id="why-not-just-use-one-big-table" class="level3">
@@ -408,7 +408,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The <code>JOIN</code> we just performed is called an <code>INNER JOIN</code>. In the future, I will use the keyword <code>INNER JOIN</code> to refer to these joins to distinguish them from <code>LEFT</code> and <code>FULL OUTER</code> JOINS.</p>
 <p>We can now filter our joined input using <code>SELECT</code> and <code>WHERE</code> clauses. The following query gives the <code>FirstName</code>, <code>LastName</code>, <code>InvoiceDate</code>, and <code>Total</code> of each customer and their associated purchases, provided the customer has the string <code>John</code> somewhere in their name.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> FirstName, LastName, InvoiceDate, Total</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> FirstName <span class="kw">LIKE</span> <span class="st">'%John%'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
@@ -464,8 +464,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<section id="quiz-a-first-join-practice" class="level4">
-<h4 class="anchored" data-anchor-id="quiz-a-first-join-practice">Quiz: A First JOIN Practice</h4>
+<section id="quiz-a-first-inner-join-practice" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-a-first-inner-join-practice">Quiz: A First INNER JOIN Practice</h4>
 <p>Let’s say you want to find the <code>AlbumId</code>, <code>Title</code>, and (Artist) <code>Name</code> of every album in the <code>Album</code> table with the word <code>'Greatest'</code> in its title. This will require you join the <code>Album</code> table to the <code>Artist</code> table. I have provided boilerplate to get you started.</p>
 <ul>
 <li>Use <code>ArtistName</code> as an alias for <code>Name</code> for clarity.</li>
@@ -473,7 +473,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Don’t forget to express your join fields in <code>table.field</code> form.</li>
 </ul>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="co">---</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">JOIN</span> Artist <span class="kw">ON</span> <span class="co">--- = -----</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">INNER</span> <span class="kw">JOIN</span> Artist <span class="kw">ON</span> <span class="co">--- = -----</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Title <span class="kw">LIKE</span> <span class="co">---</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="co">---'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -489,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> AlbumId, Title, Name <span class="kw">as</span> ArtistName</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">JOIN</span> Artist <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Album <span class="kw">INNER</span> <span class="kw">JOIN</span> Artist <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> Title <span class="kw">LIKE</span> <span class="st">'%Greatest%'</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Title;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
@@ -546,9 +546,253 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-
-
+<p>Joins are typically peformed between fields that are linked by a primary key/foreign key relationship. This allows us to ask complex questions about the same objects, people, or records by aggregating or concatenating information distributed across multiple tables.</p>
+<p>When using <code>SELECT *</code> with joined tables, you will see every column in both tables, even when columns are repeated.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Null values are not considered equal to each other, so an <code>INNER JOIN</code> will <strong>not</strong> return rows where both A and B of <code>ON A = B</code> are null.</p>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 23%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 46%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>GenreId</th>
+<th>Name</th>
+<th>TrackId</th>
+<th>AlbumId</th>
+<th>Composer</th>
+<th>Milliseconds</th>
+<th>Bytes</th>
+<th>UnitPrice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>For Those About To Rock (We Salute You)</td>
+<td>1</td>
+<td>1</td>
+<td>Angus Young, Malcolm Young, Brian Johnson</td>
+<td>343719</td>
+<td>11170334</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Balls to the Wall</td>
+<td>2</td>
+<td>2</td>
+<td>U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann</td>
+<td>342562</td>
+<td>5510424</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Fast As a Shark</td>
+<td>3</td>
+<td>3</td>
+<td>F. Baltes, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
+<td>230619</td>
+<td>3990994</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Restless and Wild</td>
+<td>4</td>
+<td>3</td>
+<td>F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
+<td>252051</td>
+<td>4331779</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Princess of the Dawn</td>
+<td>5</td>
+<td>3</td>
+<td>Deaffy &amp; R.A. Smith-Diesel</td>
+<td>375418</td>
+<td>6290521</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table>
 </section>
+</section>
+<section id="selection-with-joins" class="level2">
+<h2 class="anchored" data-anchor-id="selection-with-joins">Selection with Joins</h2>
+<p>You can use <code>SELECT</code> followed by column names to restrict the results to specific columns, just as you would any other query.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> TrackId, UnitPrice</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>UnitPrice</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>0.99</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>0.99</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>0.99</td>
+</tr>
+</tbody>
+</table>
+<p>However, if your joined tables have a column of the same name, you will be prompted to use <code>table.col_name</code> format in the <code>SELECT</code> clause.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>ambiguous column: Name</code></pre>
+<p>In the example above, both <code>Genre</code> and <code>Track</code> have <code>Name</code> fields, but <code>Name</code> in the <code>Genre</code> table represents a genre, while <code>Name</code> in <code>Track</code> is the name of a song.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, Genre.Name</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+<p>Using <code>table.field</code> notation makes the intent of the query clear to the SQL engine, but these results are no longer clearly to a human interpreter of the data: there are two different fields called <code>Name</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">as</span> Track, Genre.Name <span class="kw">as</span> Genre</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Track</th>
+<th>Genre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+<p>Using <code>AS</code> aliases make the query results more human-readable. Use aliases liberally when performing joins and other complicated SQL queries.</p>
+<p>When performing <code>INNER JOIN</code> operations, the number of rows in the result will be the same regardless of whether you join A to B or B to A, provided you use the same joining condition. This makes sense, given what we know about inner joins. If <code>A=B</code>, then <code>B=A</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">AS</span> Title, Genre.Name <span class="kw">AS</span> Genre</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> Genre</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Title</th>
+<th>Genre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>For Those About To Rock (We Salute You)</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Balls to the Wall</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Fast As a Shark</td>
+<td>Rock</td>
+</tr>
+<tr class="even">
+<td>Restless and Wild</td>
+<td>Rock</td>
+</tr>
+<tr class="odd">
+<td>Princess of the Dawn</td>
+<td>Rock</td>
+</tr>
+</tbody>
+</table>
+
+
 </section>
 
 </main> <!-- /main -->

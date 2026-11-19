@@ -209,266 +209,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="using-other-sql-clauses-with-inner-join" class="level2">
-<h2 class="anchored" data-anchor-id="using-other-sql-clauses-with-inner-join">Using Other SQL Clauses with INNER JOIN</h2>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="../images/05-inner-join.png" class="img-fluid figure-img" width="800"></p>
-<figcaption>A visual explanation of an inner join</figcaption>
-</figure>
-</div>
-<p>In our last lesson, you were introduced to the <code>JOIN</code> or <code>INNER JOIN</code> operation, which, given a match between columns expressed in <code>TABLE1.col1</code>, <code>TABLE2.col2</code> form, allows you to create a new result with a row corresponding to each pair of matching rows between the two tables.</p>
-<p>Joins are typically peformed between fields that are linked by a primary key/foreign key relationship. This allows us to ask complex questions about the same objects, people, or records by aggregating or concatenating information distributed across multiple tables.</p>
-<p>When using <code>SELECT *</code> with joined tables, you will see every column in both tables, even when columns are repeated.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Null values are not considered equal to each other, so an <code>INNER JOIN</code> will <strong>not</strong> return rows where both A and B of <code>ON A = B</code> are null.</p>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 4%">
-<col style="width: 23%">
-<col style="width: 4%">
-<col style="width: 4%">
-<col style="width: 46%">
-<col style="width: 7%">
-<col style="width: 4%">
-<col style="width: 5%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>GenreId</th>
-<th>Name</th>
-<th>TrackId</th>
-<th>AlbumId</th>
-<th>Composer</th>
-<th>Milliseconds</th>
-<th>Bytes</th>
-<th>UnitPrice</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>For Those About To Rock (We Salute You)</td>
-<td>1</td>
-<td>1</td>
-<td>Angus Young, Malcolm Young, Brian Johnson</td>
-<td>343719</td>
-<td>11170334</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>Balls to the Wall</td>
-<td>2</td>
-<td>2</td>
-<td>U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann</td>
-<td>342562</td>
-<td>5510424</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>Fast As a Shark</td>
-<td>3</td>
-<td>3</td>
-<td>F. Baltes, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
-<td>230619</td>
-<td>3990994</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>Restless and Wild</td>
-<td>4</td>
-<td>3</td>
-<td>F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider &amp; W. Hoffman</td>
-<td>252051</td>
-<td>4331779</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>1</td>
-<td>Princess of the Dawn</td>
-<td>5</td>
-<td>3</td>
-<td>Deaffy &amp; R.A. Smith-Diesel</td>
-<td>375418</td>
-<td>6290521</td>
-<td>0.99</td>
-</tr>
-</tbody>
-</table>
-<p>You can use <code>SELECT</code> followed by column names to restrict the results to specific columns, just as you would any other query.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> TrackId, UnitPrice</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>TrackId</th>
-<th>UnitPrice</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>0.99</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>0.99</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>0.99</td>
-</tr>
-</tbody>
-</table>
-<p>However, if your joined tables have a column of the same name, you will be prompted to use <code>table.col_name</code> format in the <code>SELECT</code> clause.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Name</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<pre class="output"><code>ambiguous column: Name</code></pre>
-<p>In the example above, both <code>Genre</code> and <code>Track</code> have <code>Name</code> fields, but <code>Name</code> in the <code>Genre</code> table represents a genre, while <code>Name</code> in <code>Track</code> is the name of a song.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, Genre.Name</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Name</th>
-<th>Name</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>For Those About To Rock (We Salute You)</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Balls to the Wall</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Fast As a Shark</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Restless and Wild</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Princess of the Dawn</td>
-<td>Rock</td>
-</tr>
-</tbody>
-</table>
-<p>Using <code>table.field</code> notation makes the intent of the query clear to the SQL engine, but these results are no longer clearly to a human interpreter of the data: there are two different fields called <code>Name</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">as</span> Track, Genre.Name <span class="kw">as</span> Genre</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Track</th>
-<th>Genre</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>For Those About To Rock (We Salute You)</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Balls to the Wall</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Fast As a Shark</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Restless and Wild</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Princess of the Dawn</td>
-<td>Rock</td>
-</tr>
-</tbody>
-</table>
-<p>Using <code>AS</code> aliases make the query results more human-readable. Use aliases liberally when performing joins and other complicated SQL queries.</p>
-<p>When performing <code>INNER JOIN</code> operations, the number of rows in the result will be the same regardless of whether you join A to B or B to A, provided you use the same joining condition. This makes sense, given what we know about inner joins. If <code>A=B</code>, then <code>B=A</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name <span class="kw">AS</span> Title, Genre.Name <span class="kw">AS</span> Genre</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> Genre</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Title</th>
-<th>Genre</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>For Those About To Rock (We Salute You)</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Balls to the Wall</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Fast As a Shark</td>
-<td>Rock</td>
-</tr>
-<tr class="even">
-<td>Restless and Wild</td>
-<td>Rock</td>
-</tr>
-<tr class="odd">
-<td>Princess of the Dawn</td>
-<td>Rock</td>
-</tr>
-</tbody>
-</table>
-<section id="group-by-and-joins" class="level3">
-<h3 class="anchored" data-anchor-id="group-by-and-joins"><code>GROUP BY</code> and Joins</h3>
-<p>We can use <code>GROUP BY</code> and <code>HAVING</code> clauses with joined tables. Just like with <code>SELECT</code>, using <code>table.field</code> form is the <code>GROUP BY</code> cluase is sometimes necessary to avoid ambiguity.</p>
+<section id="refresher-joining-with-inner-join" class="level2">
+<h2 class="anchored" data-anchor-id="refresher-joining-with-inner-join">Refresher: Joining with INNER JOIN</h2>
+<p>In our last lesson, you were introduced to the <code>JOIN</code> or <code>INNER JOIN</code> operation, which, given a match between columns expressed in <code>ON TABLE1.col1 = TABLE2.col2</code> form, allows you to create a new result with a row corresponding to each pair of matching values between the two tables.</p>
+<p>Joins are typically performed between fields that are linked by a primary key/foreign key relationship. This allows us to ask complex questions about the same objects, people, or records by aggregating or concatenating information distributed across multiple tables.</p>
+</section>
+<section id="group-by-and-joins" class="level2">
+<h2 class="anchored" data-anchor-id="group-by-and-joins"><code>GROUP BY</code> and Joins</h2>
+<p>We can use <code>GROUP BY</code> and <code>HAVING</code> clauses with joined tables. Just like with <code>SELECT</code>, using <code>table.field</code> form in the <code>GROUP BY</code> clause is sometimes necessary to avoid ambiguity.</p>
 <p>The following query computes the five most popular genres of <code>Track</code> in the database by joining the <code>Genre</code> and <code>Track</code> tables and counting the number of tracks <em>per</em> genre with <code>COUNT</code>. Then, these groups are sorted by the number of tracks per genre or <code>NumTracks</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Genre.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackId) <span class="kw">as</span> NumTracks</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Genre.Name</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumTracks <span class="kw">DESC</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Genre.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackId) <span class="kw">as</span> NumTracks</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Genre <span class="kw">INNER</span> <span class="kw">JOIN</span> Track </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Track.GenreId <span class="op">=</span> Genre.GenreId</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Genre.Name</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumTracks <span class="kw">DESC</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -503,13 +258,13 @@ Important
 <section id="quiz-join-and-group-by" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-join-and-group-by">Quiz: JOIN and GROUP BY</h4>
 <p>Write a query that finds the CustomerId, FirstName and LastName of the 3 customers who spent the most money (sum of <code>Total</code>) by joining the <code>Invoice</code> and <code>Customer</code> tables on <code>CustomerId</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="co">-----</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- ON ------ = ---------</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="co">------ ------</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="co">-----</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- ON ------ = ---------</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="co">------ ------</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -518,14 +273,14 @@ Important
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="fu">SUM</span>(Total)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">SUM</span>(Total) <span class="kw">DESC</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, FirstName, LastName, <span class="fu">SUM</span>(Total)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, FirstName, LastName </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">SUM</span>(Total) <span class="kw">DESC</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -560,32 +315,31 @@ Important
 </div>
 </div>
 </section>
-</section>
 <section id="joins-gone-wrong-joining-against-arbitrary-fields" class="level3">
 <h3 class="anchored" data-anchor-id="joins-gone-wrong-joining-against-arbitrary-fields">Joins Gone Wrong: Joining Against Arbitrary Fields</h3>
 <p>Just because two fields in two database tables share the same name doesn’t mean they are good candidates for joins. Foreign key relationships make for good joins because you can make guarantees about the shape and cardinality (the number of rows) in your results. Remember, primary keys correspond to at most one row in their respective tables.</p>
-<p>What happens if we do an arbirtary many-to-many join? Let’s take <code>UnitPrice</code> as it appears in <code>Track</code> and <code>UnitPrice</code> as it appears in <code>InvoiceLine</code>. These both correspond to the price of a song or television episode from the <code>Track</code> table.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.UnitPrice <span class="op">=</span> InvoiceLine.UnitPrice</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This query produces an enormous result! Because many rows in <code>Track</code> have the same <code>UnitPrice</code> (0.99) and many rows in <code>InvoiceLine</code> have the same <code>UnitPrice</code> (0.99), it produces a table of size 7028053 rows.</p>
+<p>What happens if we do an arbitrary many-to-many join? Let’s take <code>UnitPrice</code> as it appears in <code>Track</code> and <code>UnitPrice</code> as it appears in <code>InvoiceLine</code>. These both correspond to the price of a song or television episode from the <code>Track</code> table.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.Name, InvoiceLine.UnitPrice</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> InvoiceLine <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">ON</span> Track.UnitPrice <span class="op">=</span> InvoiceLine.UnitPrice</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This query produces an enormous result! Because many rows in <code>Track</code> have the same <code>UnitPrice</code> (0.99) and many rows in <code>InvoiceLine</code> have the same <code>UnitPrice</code> (0.99), it produces a result with 7028053 rows.</p>
 </section>
 </section>
 <section id="other-joins-full-outer-join-and-left-join" class="level2">
 <h2 class="anchored" data-anchor-id="other-joins-full-outer-join-and-left-join">Other Joins: <code>FULL OUTER JOIN</code> and <code>LEFT JOIN</code></h2>
 <p>As stated above, <code>INNER JOIN</code> operations ignore tuples that have null values in the column used to join tables in <em>either</em> of the tables being joined. This isn’t always desirable, especially when the <em>absence</em> of a certain foreign key in a table is meaningful.</p>
 <p><img src="../images/05-outer-join.png" class="img-fluid quarto-figure quarto-figure-left" width="800" alt="A visual explanation of an outer join"> The <code>FULL OUTER JOIN</code> operation includes input tuples “padded” with <code>NULL</code> values if either side of the join has unmatched tuples. This means every row in each of the tables in a <code>FULL OUTER JOIN</code> is included at least once in the output.</p>
-<p>Let’s take the <code>InvoiceLine</code> and <code>TrackId</code> tables for example to see this difference. Each <code>InvoiceLine</code> has a non-null <code>TrackId</code>, but not every <code>Track</code> in the <code>Track</code> table has been purchased. How do we know?</p>
-<p>This <code>INNER JOIN</code> has 2240 results, even though the <code>Track</code> table has 3503 rows. This is because any tracks that have one or more corresponding rows in the <code>InvoiceLine</code> do not appear in the results.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Let’s inspect the <code>InvoiceLine</code> and <code>Track</code> tables to see this difference. Each <code>InvoiceLine</code> has a non-null <code>TrackId</code>, but not every <code>Track</code> in the <code>Track</code> table has been purchased. How do we know?</p>
+<p>This <code>INNER JOIN</code> has 2240 results, even though the <code>Track</code> table has 3503 rows. This is because tracks that have do not have corresponding rows in <code>InvoiceLine</code> do not appear in the results.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If it was important that <em>every</em> track (and every invoice line) be included in the results, then we could use a FULL OUTER JOIN instead, which returns 3759 rows. This is because some tracks have been purchased twice, while others have never been purchased.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, InvoiceLineId</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>We can then apply grouping to this join to learn more about the distribution of track purchases.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -617,10 +371,11 @@ Important
 </tbody>
 </table>
 <p>…</p>
-<p>By restricting this query to groups (invoice lines grouped by track) with no known purchases with the having clause, we can see that 1519 tracks in the database have never been purchased.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>By restricting this query to groups (invoice lines grouped by track) with no known purchases with the <code>HAVING</code> clause, we can see that 1519 tracks in the database have never been purchased.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> NumPurchases<span class="op">=</span><span class="dv">0</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -654,9 +409,9 @@ Important
 <p>…</p>
 <section id="quiz-full-outer-join-vs.-inner-join" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-full-outer-join-vs.-inner-join">Quiz: FULL OUTER JOIN vs.&nbsp;INNER JOIN</h4>
-<p>If we switch the FULL OUTER JOIN to an INNER JOIN in the query above, what will happen to our results.</p>
-<div id="radio_NHVCJAKFYD" class="webex-radiogroup">
-<label><input type="radio" autocomplete="off" name="radio_NHVCJAKFYD" value="answer"> <span>There will be no results, as there will be groups of rows corresponding to <code>TrackIds</code> with no <code>InvoiceLine</code> matches.</span></label><label><input type="radio" autocomplete="off" name="radio_NHVCJAKFYD" value=""> <span>There will be fewer results, as each TrackId has at most one InvoiceLine.</span></label><label><input type="radio" autocomplete="off" name="radio_NHVCJAKFYD" value=""> <span>There will be more results, because the INNER JOIN includes more rows from the Track table.</span></label>
+<p>If we switch the FULL OUTER JOIN to an INNER JOIN in the query above, what will happen to our results?</p>
+<div id="radio_WVGNKQEPLA" class="webex-radiogroup">
+<label><input type="radio" autocomplete="off" name="radio_WVGNKQEPLA" value="answer"> <span>There will be no results, as there will be groups of rows corresponding to <code>TrackIds</code> with no <code>InvoiceLine</code> matches.</span></label><label><input type="radio" autocomplete="off" name="radio_WVGNKQEPLA" value=""> <span>There will be fewer results, as each TrackId has at most one InvoiceLine.</span></label><label><input type="radio" autocomplete="off" name="radio_WVGNKQEPLA" value=""> <span>There will be more results, because the INNER JOIN includes more rows from the Track table.</span></label>
 </div>
 </section>
 <section id="left-join-briefly-explained" class="level3">
@@ -669,12 +424,107 @@ Important
 </figure>
 </div>
 <p>The <code>LEFT JOIN</code> operation includes input tuples “padded” with <code>NULL</code> values on the “right” if any tuples on the left have no matches. This means every row in the table of the left side of a <code>LEFT JOIN</code> is included at least once in the output.</p>
-<p>We can adjust our query above using a <code>LEFT JOIN</code> operator to find the purchase count for the first five tracks in the database in alphabetical order.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, Track.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId, Track.Name</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In this example query, you can see that every TrackId and Name from the <code>Track</code> table on the left side of the join appears at least once.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, Track.Name, InvoiceLineId</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.TrackId</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">15</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>TrackId</th>
+<th>Name</th>
+<th>InvoiceLineId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>For Those About To Rock (We Salute You)</td>
+<td>579</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Balls to the Wall</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Balls to the Wall</td>
+<td>1154</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Fast As a Shark</td>
+<td>1728</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Restless and Wild</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Princess of the Dawn</td>
+<td>580</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Put The Finger On You</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Let’s Get It Up</td>
+<td>null</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>Inject The Venom</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Inject The Venom</td>
+<td>1155</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Snowballed</td>
+<td>581</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>Snowballed</td>
+<td>1729</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>Evil Walks</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>C.O.D.</td>
+<td>null</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Breaking The Rules</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Just like in an <code>INNER JOIN</code>, if a value, in this case <code>TrackId</code> has multiple matches, then each match will appear as a row in the result of the join.</li>
+<li>Observe that the rows for <code>TrackId=7</code> and <code>TrackId=11</code> have an <code>InvoiceLineId</code> of <code>NULL</code> because there are no purchases of those track in the <code>InvoiceLine</code> table.</li>
+</ul>
+<p>We can adjust our purchase count query above using a <code>LEFT JOIN</code> operator to find the purchase counts for the first five tracks in the database in alphabetical order.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Track.TrackId, Track.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Track <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Track.TrackId <span class="op">=</span> InvoiceLine.TrackId</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Track.TrackId, Track.Name</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Track.Name </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 9%">
@@ -720,12 +570,12 @@ Important
 <section id="a-note-on-join-types" class="level3">
 <h3 class="anchored" data-anchor-id="a-note-on-join-types">A Note On Join Types</h3>
 <p>If every non-null value of <code>A.key</code> is present in <code>B</code> and vice-versa, then an <code>INNER JOIN</code> is equivalent to <code>FULL OUTER JOIN</code> and <code>LEFT JOIN</code>. Observe how the two queries below have the same number of results.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> InvoiceLine</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.CustomerId, InvoiceLine.InvoiceLineId</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -736,23 +586,95 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There is a <code>RIGHT JOIN</code> counterpart to <code>LEFT JOIN</code>, but it’s rarely used because <code>RIGHT JOIN</code> operations can always expressed as <code>LEFT JOIN</code> operations with the order of the tables inverted. In fact, early versions of SQLite didn’t even <em>have</em> a RIGHT JOIN keyword.</p>
+<p>There is a <code>RIGHT JOIN</code> counterpart to <code>LEFT JOIN</code>, but it’s rarely used because <code>RIGHT JOIN</code> operations can always be expressed as <code>LEFT JOIN</code> operations with the order of the tables inverted. In fact, early versions of SQLite didn’t even <em>have</em> a RIGHT JOIN keyword.</p>
 </div>
 </div>
+<section id="quiz-practice-with-left-join" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-practice-with-left-join">Quiz: Practice with <code>LEFT JOIN</code></h4>
+<p>Write a query that finds the number of <code>InvoiceId</code>, <code>Total</code> and the number of unique <code>InvoiceLineId</code> values per <code>InvoiceId</code> in <code>Invoice</code> using a <code>LEFT JOIN</code> operation. Use the template below to get started.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> _______.InvoiceId, ________, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COUNT</span>(________) <span class="kw">AS</span> Lines</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> ______._______ <span class="op">=</span> _______.______</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> _______._______</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Lines <span class="kw">ASC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Are there any <code>InvoiceId</code> values in <code>Invoice</code> without at least one corresponding <code>InvoiceLine</code> in <code>InvoiceLine</code>? How do you know?</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Invoice.InvoiceId, Invoice.Total, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COUNT</span>(InvoiceLine.InvoiceLineId) <span class="kw">AS</span> Lines</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Invoice <span class="kw">LEFT</span> <span class="kw">JOIN</span> InvoiceLine </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Invoice.InvoiceId</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Lines <span class="kw">ASC</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>InvoiceId</th>
+<th>Total</th>
+<th>Lines</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6</td>
+<td>0.99</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>0.99</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td>0.99</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>27</td>
+<td>0.99</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>34</td>
+<td>0.99</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>No.&nbsp;If there were any rows in Invoice without at least one corresponding purchase line in <code>InvoiceLine</code>, your <code>LEFT JOIN</code> would have surfaced <code>InvoiceId</code> values where <code>Lines</code> would be equal to 0.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="joining-three-or-more-tables" class="level2">
 <h2 class="anchored" data-anchor-id="joining-three-or-more-tables">Joining Three or More Tables</h2>
 <p>You can join three or more tables in the same <code>FROM</code> clause, but you need to be careful to specify what you are joining on for each <code>JOIN</code>.</p>
-<p>The following query joins three tables, <code>Customer</code>, <code>Invoice</code>, and <code>InvoiceLine</code>, groups the resulting joined rows by <code>CustomerId</code>, then aggregates to find the number of purchases and the most recent purchase of each customer.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The following query joins three tables, <code>Customer</code>, <code>Invoice</code>, and <code>InvoiceLine</code>, groups the resulting joined rows by <code>CustomerId</code>, then aggregates to find the number of purchased tracks and the most recent purchase of each customer.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> InvoiceLineId) <span class="kw">as</span> NumPurchases,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -791,14 +713,14 @@ Tip
 </table>
 <section id="quiz-big-joins" class="level4">
 <h4 class="anchored" data-anchor-id="quiz-big-joins">Quiz: Big Joins</h4>
-<p>Some albums have many different composer credits! Find the ten albums in the database (and the musical artists responsible for them) with the greatest number of <em>distinct</em> composer attributions by joining the <code>Artist</code>, <code>Album</code> and <code>Track</code> tables. Remember, all the composer information varies on a Track by Track basis. <code>INNER JOIN</code> operations are appropriate here.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> <span class="co">-------) as NumComposerCredits</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- on ------ = -------</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="co">-------</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Some albums have many different composer credits! Find the 5 albums in the database (and the musical artists responsible for them) with the greatest number of <em>distinct</em> composer attributions by joining the <code>Artist</code>, <code>Album</code> and <code>Track</code> tables. Remember, all the composer information varies on a Track by Track basis. <code>INNER JOIN</code> operations are appropriate here.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> <span class="co">-------) as NumComposerCredits</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> <span class="co">----- ON ------ = -------</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="co">-------</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -811,13 +733,13 @@ Tip
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> Composer) <span class="kw">as</span> NumComposerCredits</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">on</span> Track.AlbumId <span class="op">=</span> Album.AlbumId</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Album.AlbumId</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Album.AlbumId, Album.Title, Artist.Name, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> Composer) <span class="kw">as</span> NumComposerCredits</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Artist </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Album <span class="kw">ON</span> Album.ArtistId <span class="op">=</span> Artist.ArtistId</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Track <span class="kw">on</span> Track.AlbumId <span class="op">=</span> Album.AlbumId</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Album.AlbumId, Album.Title, Artist.Name</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> NumComposerCredits <span class="kw">DESC</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 8%">
@@ -875,14 +797,14 @@ Tip
 <h2 class="anchored" data-anchor-id="saving-complex-queries-as-views">Saving Complex Queries as Views</h2>
 <p>You’re now writing complex queries that would take you time to rewrite. Joining three or more tables can be painstaking, and it’s not uncommon to run the same report on a regular basis.</p>
 <p>A <code>VIEW</code> is a (virtual) table that is populated every time you query it. Any SQL query can be made into a <code>VIEW</code>, but the feature is typically used for complex queries or analyses.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> BigPurchases <span class="kw">AS</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, Invoice.BillingCountry, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackID) <span class="kw">as</span> NumPurchases,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceLineId</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, Invoice.BillingCountry</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> BigPurchases <span class="kw">AS</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Customer.CustomerId, Invoice.BillingCountry, <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> TrackID) <span class="kw">as</span> NumPurchases,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(InvoiceDate) <span class="kw">AS</span> MostRecentPurchase</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Customer </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> Invoice <span class="kw">ON</span> Customer.CustomerId <span class="op">=</span> Invoice.CustomerId</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INNER</span> <span class="kw">JOIN</span> InvoiceLine <span class="kw">ON</span> Invoice.InvoiceId <span class="op">=</span> InvoiceLine.InvoiceId</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> Customer.CustomerId, Invoice.BillingCountry</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> MostRecentPurchase <span class="kw">DESC</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="../images/06-beekeeper-view.png" class="img-fluid figure-img" width="800"></p>
@@ -891,8 +813,84 @@ Tip
 </div>
 <p>Click on the left Entities to see your new view in Beekeeper Studio. This view is saved to your database, so it is available to you each time you open Beekeeper Studio.</p>
 <p>To remove a view, right-click the view and click <strong>Drop</strong>.</p>
-<section id="closing-note" class="level4">
-<h4 class="anchored" data-anchor-id="closing-note">Closing Note</h4>
+</section>
+<section id="inserting-and-updating-values" class="level2">
+<h2 class="anchored" data-anchor-id="inserting-and-updating-values">Inserting and Updating Values</h2>
+<p>Let’s say we want to add <code>'Dolly Parton'</code> to our <code>Artist</code> table. There are exactly 275 rows, with the primary key <code>ArtistId</code> numbered from 1 to 275. That means our next <code>ArtistId</code> should be 276.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Artist (ArtistId, Name)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">276</span>, <span class="st">'Dolly Parton'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>Query 1/1. No results. 1 rows affected.</code></pre>
+<p>Inspect the <code>Artist</code> table in the Beekeeper Studio browsing interface. You should see your new row. Keep in mind that you cannot update existing rows with an <code>INSERT</code> statement and that no two rows can have the same primary key.</p>
+<p>To update an existing row, use the <code>UPDATE</code> and <code>SET</code> keywords. Be <em>very careful</em> to restrict which rows you update by using a <code>WHERE</code> clause to avoiding changing all rows in the table.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> Artist</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> Name <span class="op">=</span> <span class="st">'Dolly Parton'</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> ArtistId <span class="op">=</span> <span class="dv">276</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>Query 1/1. No results. 1 rows affected.</code></pre>
+<section id="quiz-inserting-new-rows" class="level4">
+<h4 class="anchored" data-anchor-id="quiz-inserting-new-rows">Quiz: Inserting New Rows</h4>
+<p>Write a query that adds Dolly Parton’s album <code>The Grass is Blue</code> to the <code>Album</code> table. Remember that Parton’s ArtistId is 276. The next available <code>AlbumId</code> is 348.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Album (_____, ____,_____)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">348</span>, _______ , __________);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Album (AlbumId, Title, ArtistId)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">348</span>, <span class="st">'The Grass is Blue'</span>, <span class="dv">276</span>);</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> Album </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> AlbumId <span class="op">=</span> <span class="dv">348</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>AlbumId</th>
+<th>Title</th>
+<th>ArtistId</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>348</td>
+<td>The Grass is Blue</td>
+<td>276</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="insertion-and-constraints" class="level3">
+<h3 class="anchored" data-anchor-id="insertion-and-constraints">Insertion and Constraints</h3>
+<p>You cannot violate constraints on values and relationships within a SQL database when inserting or updating values. For example, because <code>ArtistId</code> must be an integer, we cannot insert a row with <code>ArtistId</code> <code>ABCDE</code> because <code>ABCDE</code> is of the wrong data type.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Artist (ArtistId, Name)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'ABCDE'</span>, <span class="st">'Dolly Parton'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>datatype mismatch</code></pre>
+<p>Similarly, we cannot violate primary key/foreign key relationships encoded in the database. For example, because <code>ArtistId</code> is a foreign key in the <code>Album</code> table, we cannot insert albums with <code>ArtistId</code> values not in the <code>Artist</code> table.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Album (AlbumId, Title, ArtistId)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="dv">350</span>, <span class="st">'Fake Album'</span>, <span class="dv">10000</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre class="output"><code>FOREIGN Key constraint failed</code></pre>
+<p>This is a feature, not a bug! Database constraints exist to protect data from human error.</p>
+</section>
+</section>
+<section id="sql-best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="sql-best-practices">SQL Best Practices</h2>
+<ul>
+<li>Don’t make assumptions about the structure of your database: you can always check by manually inspecting primary key and foreign keys, data types, and constraints.</li>
+<li>Know which columns can take on <code>NULL</code> values.</li>
+<li>Don’t default to <code>INNER JOIN</code> operations if the <em>absence</em> of a match is important.</li>
+<li>Avoid using complicated subqueries: if you find yourself nesting queries within queries, there may be a better and faster way to compute the information you want through a join or through creating a view.</li>
+</ul>
+<section id="thank-you-for-joining" class="level4">
+<h4 class="anchored" data-anchor-id="thank-you-for-joining">Thank You for Joining</h4>
 <p>Thank you so much for participating in this workshop series! If you would like to learn more, I would encourage you to continue your SQL journey by looking through our recommended <a href="../resources.html">additional resources</a>.</p>
 
 
