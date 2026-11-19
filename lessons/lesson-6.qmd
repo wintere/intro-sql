@@ -3,136 +3,17 @@ title: "Using Joins"
 format: html
 ---
 
-## Using Other SQL Clauses with INNER JOIN
+## Refresher: Joining with INNER JOIN
 
-![A visual explanation of an inner join](../images/05-inner-join.png){width=800 fig-align="left"}
+In our last lesson, you were introduced to the `JOIN` or `INNER JOIN` operation, which, given a match between columns expressed in `ON TABLE1.col1 = TABLE2.col2` form, allows you to create a new result with a row corresponding to each pair of matching values between the two tables.
 
-In our last lesson, you were introduced to the `JOIN` or `INNER JOIN` operation,
-which, given a match between columns expressed in `TABLE1.col1`, `TABLE2.col2`
-form, allows you to create a new result with a row corresponding to each
-pair of matching rows between the two tables.
+Joins are typically performed between fields that are linked by a primary key/foreign key relationship. This allows us to ask complex questions about the same objects, people, or records by aggregating or concatenating information distributed across multiple tables.
 
-Joins are typically peformed between fields that are linked by a primary key/foreign 
-key relationship. This allows us to ask complex questions about the same objects, people, or
-records by aggregating or concatenating information distributed across multiple tables.
- 
-When using `SELECT *` with joined tables, you will see every column
-in both tables, even when columns are repeated. 
-
-::: {.callout-important}
-Null values are not considered equal to each other, so an `INNER JOIN` will **not**
-return rows where both A and B of `ON A = B` are null.
-:::
-
-```sql
-SELECT * 
-FROM Genre INNER JOIN Track
-ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-| GenreId | Name                                    | TrackId | AlbumId | Composer                                                                     | Milliseconds | Bytes    | UnitPrice |
-| ------- | --------------------------------------- | ------- | ------- | ---------------------------------------------------------------------------- | ------------ | -------- | --------- |
-| 1       | For Those About To Rock (We Salute You) | 1       | 1       | Angus Young, Malcolm Young, Brian Johnson                                    | 343719       | 11170334 | 0.99      |
-| 1       | Balls to the Wall                       | 2       | 2       | U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann | 342562       | 5510424  | 0.99      |
-| 1       | Fast As a Shark                         | 3       | 3       | F. Baltes, S. Kaufman, U. Dirkscneider & W. Hoffman                          | 230619       | 3990994  | 0.99      |
-| 1       | Restless and Wild                       | 4       | 3       | F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman       | 252051       | 4331779  | 0.99      |
-| 1       | Princess of the Dawn                    | 5       | 3       | Deaffy & R.A. Smith-Diesel                                                   | 375418       | 6290521  | 0.99      |
-
-You can use `SELECT` followed by
-column names to restrict the results to specific columns, just as you 
-would any other query. 
-
-```sql
-SELECT TrackId, UnitPrice
-FROM Genre INNER JOIN Track ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-| TrackId | UnitPrice |
-| ------- | --------- |
-| 1       | 0.99      |
-| 2       | 0.99      |
-| 3       | 0.99      |
-| 4       | 0.99      |
-| 5       | 0.99      |
-
-However, if your joined tables have a column of the same name,
-you will be prompted to use `table.col_name` format in the `SELECT` clause.
-
-
-```sql
-SELECT Name
-FROM Genre INNER JOIN Track
-ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-```output
-ambiguous column: Name
-```
-
-In the example above, both `Genre` and `Track` have `Name` fields, but
-`Name` in the `Genre` table represents a genre, 
-while `Name` in `Track` is the name of a song. 
-
-```sql
-SELECT Track.Name, Genre.Name
-FROM Genre INNER JOIN Track
-ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-| Name                                       | Name   |
-| --------------------------------------- | ---- |
-| For Those About To Rock (We Salute You) | Rock |
-| Balls to the Wall                       | Rock |
-| Fast As a Shark                         | Rock |
-| Restless and Wild                       | Rock |
-| Princess of the Dawn                    | Rock |
-
-Using `table.field` notation makes the intent of the query
-clear to the SQL engine, but these results are no longer clearly to a 
-human interpreter of the data: there are two different fields called `Name`. 
-
-```sql
-SELECT Track.Name as Track, Genre.Name as Genre
-FROM Genre INNER JOIN Track
-ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-| Track                                   | Genre |
-| --------------------------------------- | ----- |
-| For Those About To Rock (We Salute You) | Rock  |
-| Balls to the Wall                       | Rock  |
-| Fast As a Shark                         | Rock  |
-| Restless and Wild                       | Rock  |
-| Princess of the Dawn                    | Rock  |
-
-Using `AS` aliases make the query results more human-readable. 
-Use aliases liberally when performing joins and other
-complicated SQL queries.
-
-When performing `INNER JOIN` operations, the number of rows in the
-result will be the same regardless of whether you join A to B or B to A,
-provided you use the same joining condition. This makes sense,
-given what we know about inner joins. If `A=B`, then `B=A`.
-
-```sql
-SELECT Track.Name AS Title, Genre.Name AS Genre
-FROM Track INNER JOIN Genre
-ON Track.GenreId = Genre.GenreId
-LIMIT 5;
-```
-| Title                                   | Genre |
-| --------------------------------------- | ----- |
-| For Those About To Rock (We Salute You) | Rock  |
-| Balls to the Wall                       | Rock  |
-| Fast As a Shark                         | Rock  |
-| Restless and Wild                       | Rock  |
-| Princess of the Dawn                    | Rock  |
-
-### `GROUP BY` and Joins
+## `GROUP BY` and Joins
 
 We can use `GROUP BY` and `HAVING` clauses with joined tables. Just like
-with `SELECT`, using `table.field` form is the `GROUP BY` cluase is
- sometimes necessary to avoid ambiguity.
+with `SELECT`, using `table.field` form in the `GROUP BY` clause is
+sometimes necessary to avoid ambiguity.
 
 The following query computes the five most popular genres of `Track` in the
 database by joining the `Genre` and `Track` tables and counting the number
@@ -193,7 +74,7 @@ Foreign key relationships make for good joins because you can make guarantees
 about the shape and cardinality (the number of rows) in your results.
 Remember, primary keys correspond to at most one row in their respective tables.
 
-What happens if we do an arbirtary many-to-many join? Let's take `UnitPrice`
+What happens if we do an arbitrary many-to-many join? Let's take `UnitPrice`
 as it appears in `Track` and `UnitPrice` as it appears in `InvoiceLine`.
 These both correspond to the price of a song or television episode from 
 the `Track` table.
@@ -206,7 +87,7 @@ ORDER BY Track.Name;
 
 This query produces an enormous result!
 Because many rows in `Track` have the same `UnitPrice` (0.99) and many rows in `InvoiceLine`
-have the same `UnitPrice` (0.99), it produces a table of size 7028053 rows.
+have the same `UnitPrice` (0.99), it produces a result with 7028053 rows.
 
 ## Other Joins: `FULL OUTER JOIN` and `LEFT JOIN`
 As stated above, `INNER JOIN` operations ignore tuples that have null values in the column used to
@@ -218,12 +99,12 @@ The `FULL OUTER JOIN` operation includes input tuples "padded" with `NULL` value
 has unmatched tuples. This means every row in each of the tables in a `FULL OUTER JOIN` is included at least once
 in the output.
 
-Let's take the `InvoiceLine` and `TrackId` tables for example to see this difference. 
+Let's inspect the `InvoiceLine` and `Track` tables to see this difference. 
 Each `InvoiceLine` has a non-null `TrackId`, but not every `Track` in the `Track` table
 has been purchased. How do we know?
 
 This `INNER JOIN` has 2240 results, even though the `Track` table has 3503 rows. This is because
-any tracks that have one or more corresponding rows in the `InvoiceLine` do not
+tracks that have do not have corresponding rows in `InvoiceLine` do not
 appear in the results.
 
 ```sql
@@ -258,13 +139,14 @@ GROUP BY Track.TrackId;
 ...
 
 By restricting this query to groups (invoice lines grouped by track) with no known
-purchases with the having clause, we can see that 1519 tracks in the database
+purchases with the `HAVING` clause, we can see that 1519 tracks in the database
 have never been purchased.
 
 ```sql
 SELECT Track.TrackId, COUNT(DISTINCT InvoiceLineId) as NumPurchases
 FROM Track FULL OUTER JOIN InvoiceLine ON Track.TrackId = InvoiceLine.TrackId
-GROUP BY Track.TrackId;
+GROUP BY Track.TrackId
+HAVING NumPurchases=0;
 ```
 | TrackId | NumPurchases |
 | ------- | ------------ |
@@ -277,7 +159,7 @@ GROUP BY Track.TrackId;
 
 #### Quiz: FULL OUTER JOIN vs. INNER JOIN
 If we switch the FULL OUTER JOIN to an INNER JOIN in the query above, what will
-happen to our results.
+happen to our results?
 ```{r, echo=FALSE}
 opts_p <- c(
    answer="There will be no results, as there will be groups of rows corresponding to `TrackIds` with no `InvoiceLine` matches.",
@@ -300,8 +182,39 @@ on the left have no matches.
 This means every row in the table of the left side of a `LEFT JOIN` is included at least once
 in the output.
 
-We can adjust our query above using a `LEFT JOIN` operator to find the purchase
-count for the first five tracks in the database in alphabetical order.
+In this example query, you can see that every TrackId and Name from the `Track` table 
+on the left side of the join appears at least once.
+
+```sql
+SELECT Track.TrackId, Track.Name, InvoiceLineId
+FROM Track LEFT JOIN InvoiceLine ON Track.TrackId = InvoiceLine.TrackId
+ORDER BY Track.TrackId
+LIMIT 15;
+```
+| TrackId | Name                                    | InvoiceLineId |
+| ------- | --------------------------------------- | ------------- |
+| 1       | For Those About To Rock (We Salute You) | 579           |
+| 2       | Balls to the Wall                       | 1             |
+| 2       | Balls to the Wall                       | 1154          |
+| 3       | Fast As a Shark                         | 1728          |
+| 4       | Restless and Wild                       | 2             |
+| 5       | Princess of the Dawn                    | 580           |
+| 6       | Put The Finger On You                   | 3             |
+| 7       | Let's Get It Up                         | null          |
+| 8       | Inject The Venom                        | 4             |
+| 8       | Inject The Venom                        | 1155          |
+| 9       | Snowballed                              | 581           |
+| 9       | Snowballed                              | 1729          |
+| 10      | Evil Walks                              | 5             |
+| 11      | C.O.D.                                  | null          |
+| 12      | Breaking The Rules                      | 6             |
+
+* Just like in an `INNER JOIN`, if a value, in this case `TrackId` has multiple matches,
+then each match will appear as a row in the result of the join.
+* Observe that the rows for `TrackId=7` and `TrackId=11` have an `InvoiceLineId` of `NULL` because there are no purchases of those track in the `InvoiceLine` table.
+
+We can adjust our purchase count query above using a `LEFT JOIN` operator to find the
+purchase counts for the first five tracks in the database in alphabetical order.
 
 ```sql
 SELECT Track.TrackId, Track.Name, COUNT(DISTINCT InvoiceLineId) as NumPurchases
@@ -337,9 +250,50 @@ ON Invoice.InvoiceId = InvoiceLine.InvoiceId;
 
 ::: {.callout-tip}
 There is a `RIGHT JOIN` counterpart to `LEFT JOIN`, but it's rarely used because 
-`RIGHT JOIN` operations can always expressed as `LEFT JOIN` operations
+`RIGHT JOIN` operations can always be expressed as `LEFT JOIN` operations
 with the order of the tables inverted. In fact, early versions of SQLite didn't
 even *have* a RIGHT JOIN keyword.
+:::
+
+#### Quiz: Practice with `LEFT JOIN`
+Write a query that finds the number of `InvoiceId`, `Total` and the number
+of unique `InvoiceLineId` values per `InvoiceId` in `Invoice` using a
+`LEFT JOIN` operation. Use the template below to get started.
+
+```sql
+SELECT _______.InvoiceId, ________, 
+  COUNT(________) AS Lines
+FROM Invoice LEFT JOIN InvoiceLine 
+  ON ______._______ = _______.______
+GROUP BY _______._______
+ORDER BY Lines ASC;
+```
+
+* Are there any `InvoiceId` values in `Invoice` without at least one corresponding
+`InvoiceLine` in `InvoiceLine`? How do you know?
+
+::: {.callout-tip collapse="true"}
+## Answer
+```sql
+SELECT Invoice.InvoiceId, Invoice.Total, 
+  COUNT(InvoiceLine.InvoiceLineId) AS Lines
+FROM Invoice LEFT JOIN InvoiceLine 
+  ON Invoice.InvoiceId = InvoiceLine.InvoiceId
+GROUP BY Invoice.InvoiceId
+ORDER BY Lines ASC
+LIMIT 5;
+```
+| InvoiceId | Total | Lines |
+| --------- | ----- | ----- |
+| 6         | 0.99  | 1     |
+| 13        | 0.99  | 1     |
+| 20        | 0.99  | 1     |
+| 27        | 0.99  | 1     |
+| 34        | 0.99  | 1     |
+
+No. If there were any rows in Invoice without at least one corresponding
+purchase line in `InvoiceLine`, your `LEFT JOIN` would have surfaced `InvoiceId` values
+where `Lines` would be equal to 0.
 :::
 
 ## Joining Three or More Tables
@@ -347,8 +301,7 @@ You can join three or more tables in the same `FROM` clause, but you need to
 be careful to specify what you are joining on for each `JOIN`.
 
 The following query joins three tables, `Customer`, `Invoice`, and `InvoiceLine`, groups the 
-resulting joined rows by `CustomerId`, then aggregates to find the number of purchases
-and the most recent purchase of each customer.
+resulting joined rows by `CustomerId`, then aggregates to find the number of purchased tracks and the most recent purchase of each customer.
 
 ```sql
 SELECT Customer.CustomerId, COUNT(DISTINCT InvoiceLineId) as NumPurchases,
@@ -369,7 +322,7 @@ LIMIT 5;
 | 25         | 38           | 2025-12-05 00:00:00 |
 
 #### Quiz: Big Joins
-Some albums have many different composer credits! Find the ten albums in the database 
+Some albums have many different composer credits! Find the 5 albums in the database 
 (and the musical artists responsible for them)
 with the greatest number of *distinct* composer attributions by joining the 
 `Artist`, `Album` and `Track` tables. Remember, all the composer information varies on a 
@@ -379,7 +332,7 @@ Track by Track basis. `INNER JOIN` operations are appropriate here.
 SELECT Album.AlbumId, Album.Title, Artist.Name, COUNT(DISTINCT -------) as NumComposerCredits
 FROM Artist 
   INNER JOIN Album ON Album.ArtistId = Artist.ArtistId
-  INNER JOIN ----- on ------ = -------
+  INNER JOIN ----- ON ------ = -------
 GROUP BY -------
 ORDER BY NumComposerCredits DESC
 LIMIT 5;
@@ -391,7 +344,7 @@ SELECT Album.AlbumId, Album.Title, Artist.Name, COUNT(DISTINCT Composer) as NumC
 FROM Artist 
   INNER JOIN Album ON Album.ArtistId = Artist.ArtistId
   INNER JOIN Track on Track.AlbumId = Album.AlbumId
-GROUP BY Album.AlbumId
+GROUP BY Album.AlbumId, Album.Title, Artist.Name
 ORDER BY NumComposerCredits DESC
 LIMIT 5;
 ```
@@ -417,7 +370,7 @@ SELECT Customer.CustomerId, Invoice.BillingCountry, COUNT(DISTINCT TrackID) as N
   MAX(InvoiceDate) AS MostRecentPurchase
 FROM Customer 
   INNER JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId
-  INNER JOIN InvoiceLine ON Invoice.InvoiceId = InvoiceLine.InvoiceLineId
+  INNER JOIN InvoiceLine ON Invoice.InvoiceId = InvoiceLine.InvoiceId
 GROUP BY Customer.CustomerId, Invoice.BillingCountry
 ORDER BY MostRecentPurchase DESC;
 ```
@@ -429,7 +382,95 @@ so it is available to you each time you open Beekeeper Studio.
 
 To remove a view, right-click the view and click **Drop**.
 
-#### Closing Note
+## Inserting and Updating Values
+
+Let's say we want to add `'Dolly Parton'` to our `Artist` table. There are exactly 275 rows, with the primary key `ArtistId` numbered from 1 to 275. That means our next `ArtistId` should be 276.
+
+```sql
+INSERT INTO Artist (ArtistId, Name)
+VALUES (276, 'Dolly Parton');
+```
+```output
+Query 1/1. No results. 1 rows affected.
+```
+
+Inspect the `Artist` table in the Beekeeper Studio browsing interface. You should
+see your new row. Keep in mind that you cannot update existing rows with an `INSERT` statement
+and that no two rows can have the same primary key.
+
+To update an existing row, use the `UPDATE` and `SET` keywords. Be *very careful*
+to restrict which rows you update by using a `WHERE` clause to avoiding changing
+all rows in the table.
+
+```sql
+UPDATE Artist
+SET Name = 'Dolly Parton'
+WHERE ArtistId = 276;
+```
+```output
+Query 1/1. No results. 1 rows affected.
+```
+
+#### Quiz: Inserting New Rows
+Write a query that adds Dolly Parton's album `The Grass is Blue` to the 
+`Album` table. Remember that Parton's ArtistId is 276. The next available
+`AlbumId` is 348.
+
+```sql
+INSERT INTO Album (_____, ____,_____)
+VALUES (348, _______ , __________);
+```
+::: {.callout-tip collapse="true"}
+## Answer 
+```sql
+INSERT INTO Album (AlbumId, Title, ArtistId)
+VALUES (348, 'The Grass is Blue', 276);
+
+SELECT * FROM Album 
+WHERE AlbumId = 348;
+```
+| AlbumId | Title             | ArtistId |
+| ------- | ----------------- | -------- |
+| 348     | The Grass is Blue | 276      |
+:::
+
+### Insertion and Constraints
+You cannot violate constraints on values and relationships within
+a SQL database when inserting or updating values. For example, because
+`ArtistId` must be an integer, we cannot insert a row with `ArtistId`
+`ABCDE` because `ABCDE` is of the wrong data type.
+
+```sql
+INSERT INTO Artist (ArtistId, Name)
+VALUES ('ABCDE', 'Dolly Parton');
+```
+```output
+datatype mismatch
+```
+
+Similarly, we cannot violate primary key/foreign key relationships encoded in the database. For example,
+because `ArtistId` is a foreign key in the `Album` table, we cannot insert albums with `ArtistId` values not in the 
+`Artist` table.
+
+```sql
+INSERT INTO Album (AlbumId, Title, ArtistId)
+VALUES (350, 'Fake Album', 10000);
+```
+```output
+FOREIGN Key constraint failed
+```
+
+This is a feature, not a bug! Database constraints exist to protect data from
+human error.
+
+## SQL Best Practices
+* Don't make assumptions about the structure of your database: you can always check by manually inspecting primary key and foreign keys, data types, and constraints.
+* Know which columns can take on `NULL` values.
+* Don't default to `INNER JOIN` operations if the *absence* of a match is important.
+* Avoid using complicated subqueries: if you find yourself nesting queries within queries, there may be a better and faster way to compute the information you want 
+through a join or through creating a view.
+
+#### Thank You for Joining
 Thank you so much for participating in this workshop series! 
 If you would like to learn more, I would encourage you to continue your SQL journey 
 by looking through our recommended [additional resources](../resources.html).

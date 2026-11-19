@@ -266,7 +266,7 @@ associated purchases, provided the customer has the string
 
 ```sql   
 SELECT FirstName, LastName, InvoiceDate, Total
-FROM Customer JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId
+FROM Customer INNER JOIN Invoice ON Customer.CustomerId = Invoice.CustomerId
 WHERE FirstName LIKE '%John%';
 ```
 | FirstName | LastName | InvoiceDate         | Total |
@@ -279,7 +279,7 @@ WHERE FirstName LIKE '%John%';
 | John      | Gordon   | 2024-06-12 00:00:00 | 0.99  |
 | John      | Gordon   | 2025-12-04 00:00:00 | 1.98  |
 
-#### Quiz: A First JOIN Practice
+#### Quiz: A First INNER JOIN Practice
 Let's say you want to find the `AlbumId`, `Title`, and (Artist) `Name` of every album in the
 `Album` table with the word `'Greatest'` in its title. This will require you join the 
 `Album` table to the `Artist` table. I have provided boilerplate to get you started.
@@ -290,7 +290,7 @@ Let's say you want to find the `AlbumId`, `Title`, and (Artist) `Name` of every 
 
 ```sql
 SELECT ---
-FROM Album JOIN Artist ON --- = -----
+FROM Album INNER JOIN Artist ON --- = -----
 WHERE Title LIKE ---
 ORDER BY ---'
 ```
@@ -299,7 +299,7 @@ ORDER BY ---'
 ## Answer 
 ```sql
 SELECT AlbumId, Title, Name as ArtistName
-FROM Album JOIN Artist ON Album.ArtistId = Artist.ArtistId 
+FROM Album INNER JOIN Artist ON Album.ArtistId = Artist.ArtistId 
 WHERE Title LIKE '%Greatest%'
 ORDER BY Title;
 ```
@@ -314,3 +314,121 @@ ORDER BY Title;
 | 215     | The Police Greatest Hits           | The Police        |
 | 67      | Vault: Def Leppard's Greatest Hits | Def Leppard       |
 :::
+
+Joins are typically peformed between fields that are linked by a primary key/foreign 
+key relationship. This allows us to ask complex questions about the same objects, people, or
+records by aggregating or concatenating information distributed across multiple tables.
+ 
+When using `SELECT *` with joined tables, you will see every column
+in both tables, even when columns are repeated. 
+
+::: {.callout-important}
+Null values are not considered equal to each other, so an `INNER JOIN` will **not**
+return rows where both A and B of `ON A = B` are null.
+:::
+
+```sql
+SELECT * 
+FROM Genre INNER JOIN Track
+ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+| GenreId | Name                                    | TrackId | AlbumId | Composer                                                                     | Milliseconds | Bytes    | UnitPrice |
+| ------- | --------------------------------------- | ------- | ------- | ---------------------------------------------------------------------------- | ------------ | -------- | --------- |
+| 1       | For Those About To Rock (We Salute You) | 1       | 1       | Angus Young, Malcolm Young, Brian Johnson                                    | 343719       | 11170334 | 0.99      |
+| 1       | Balls to the Wall                       | 2       | 2       | U. Dirkschneider, W. Hoffmann, H. Frank, P. Baltes, S. Kaufmann, G. Hoffmann | 342562       | 5510424  | 0.99      |
+| 1       | Fast As a Shark                         | 3       | 3       | F. Baltes, S. Kaufman, U. Dirkscneider & W. Hoffman                          | 230619       | 3990994  | 0.99      |
+| 1       | Restless and Wild                       | 4       | 3       | F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman       | 252051       | 4331779  | 0.99      |
+| 1       | Princess of the Dawn                    | 5       | 3       | Deaffy & R.A. Smith-Diesel                                                   | 375418       | 6290521  | 0.99      |
+
+## Selection with Joins
+
+You can use `SELECT` followed by
+column names to restrict the results to specific columns, just as you 
+would any other query. 
+
+```sql
+SELECT TrackId, UnitPrice
+FROM Genre INNER JOIN Track ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+| TrackId | UnitPrice |
+| ------- | --------- |
+| 1       | 0.99      |
+| 2       | 0.99      |
+| 3       | 0.99      |
+| 4       | 0.99      |
+| 5       | 0.99      |
+
+However, if your joined tables have a column of the same name,
+you will be prompted to use `table.col_name` format in the `SELECT` clause.
+
+
+```sql
+SELECT Name
+FROM Genre INNER JOIN Track
+ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+```output
+ambiguous column: Name
+```
+
+In the example above, both `Genre` and `Track` have `Name` fields, but
+`Name` in the `Genre` table represents a genre, 
+while `Name` in `Track` is the name of a song. 
+
+```sql
+SELECT Track.Name, Genre.Name
+FROM Genre INNER JOIN Track
+ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+| Name                                       | Name   |
+| --------------------------------------- | ---- |
+| For Those About To Rock (We Salute You) | Rock |
+| Balls to the Wall                       | Rock |
+| Fast As a Shark                         | Rock |
+| Restless and Wild                       | Rock |
+| Princess of the Dawn                    | Rock |
+
+Using `table.field` notation makes the intent of the query
+clear to the SQL engine, but these results are no longer clearly to a 
+human interpreter of the data: there are two different fields called `Name`. 
+
+```sql
+SELECT Track.Name as Track, Genre.Name as Genre
+FROM Genre INNER JOIN Track
+ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+| Track                                   | Genre |
+| --------------------------------------- | ----- |
+| For Those About To Rock (We Salute You) | Rock  |
+| Balls to the Wall                       | Rock  |
+| Fast As a Shark                         | Rock  |
+| Restless and Wild                       | Rock  |
+| Princess of the Dawn                    | Rock  |
+
+Using `AS` aliases make the query results more human-readable. 
+Use aliases liberally when performing joins and other
+complicated SQL queries.
+
+When performing `INNER JOIN` operations, the number of rows in the
+result will be the same regardless of whether you join A to B or B to A,
+provided you use the same joining condition. This makes sense,
+given what we know about inner joins. If `A=B`, then `B=A`.
+
+```sql
+SELECT Track.Name AS Title, Genre.Name AS Genre
+FROM Track INNER JOIN Genre
+ON Track.GenreId = Genre.GenreId
+LIMIT 5;
+```
+| Title                                   | Genre |
+| --------------------------------------- | ----- |
+| For Those About To Rock (We Salute You) | Rock  |
+| Balls to the Wall                       | Rock  |
+| Fast As a Shark                         | Rock  |
+| Restless and Wild                       | Rock  |
+| Princess of the Dawn                    | Rock  |
